@@ -1,3 +1,4 @@
+import pandas as pd
 from flask import render_template, url_for
 from flask import Flask, request
 from werkzeug.utils import redirect
@@ -5,6 +6,7 @@ import Gtrans
 import database
 import google_api as gap
 import gcp_mysql_insert
+import json
 
 app = Flask(__name__)
 tgtresult = ""
@@ -46,6 +48,18 @@ def save_srctgt(sourcetxt, targettxt):
     print("/save에서의 result : ",result)
     # return redirect(url_for("trans"))
     return result
+
+@app.route("/saveSQL", methods=['POST'])
+def saveSQL():
+    output = request.get_json()
+    result = json.loads(output)
+    pdinfo = pd.DataFrame(result['info'])
+    uid = pdinfo.iloc[0,0]
+    name = pdinfo.iloc[1,0]
+    email = pdinfo.iloc[2,0]
+    gcp_mysql_insert.save_user_pymysql(uid,name,email)
+    return ""
+
 
 @app.route('/show')
 def show_database():

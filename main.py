@@ -70,9 +70,12 @@ def saveSQL():
 
 
 @app.route('/kg')
-def show_database():
+def kg_pay():
     return render_template('kg.html')
 
+@app.route('/graph_day')
+def show_graph_day():
+    return render_template('graph.html')
 
 if __name__ == '__main__':
     app.run()

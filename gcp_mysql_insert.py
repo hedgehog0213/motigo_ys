@@ -1,5 +1,6 @@
 import pymysql
 from datetime import datetime
+import time
 #pymysql.connect(host='funcoding-db.ca1fydhpobsc.ap-northeast-2.rds.amazonaws.com', port=3306, user='davelee', passwd='korea123', db='student_mgmt', charset='utf8')
 
 
@@ -15,8 +16,8 @@ def save_pymysql(sourcetxt, targettxt,uid): #번역 전과 번역 후를 인덱�
         for j in i:
             final = j
     index = final+1
-    sql2 = 'insert into translationsource values (%s,%s,%s,%s,%s);'
-    data = (int(index), sourcetxt, targettxt,len(sourcetxt.replace(' ','')),uid)
+    sql2 = 'insert into translationsource values (%s,%s,%s,%s,%s,%s);'
+    data = (int(index), sourcetxt, targettxt,len(sourcetxt.replace(' ','')),uid,time.strftime('%y/%m/%d - %X'))
     cur.execute(sql2, data)
     conn.commit()
     conn.close()

@@ -3,7 +3,7 @@ from flask import render_template, url_for
 from flask import Flask, request
 from werkzeug.utils import redirect
 import Gtrans
-import database
+#import database
 import google_api as gap
 import gcp_mysql_insert
 import json
@@ -61,10 +61,9 @@ def saveSQL():
     return ""
 
 
-@app.route('/show')
+@app.route('/kg')
 def show_database():
-
-    return render_template('dataframe.html',)
+    return render_template('kg.html',)
 
 
 if __name__ == '__main__':

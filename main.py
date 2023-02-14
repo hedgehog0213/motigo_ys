@@ -40,6 +40,7 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len):
         source_len=str(len(sourcetxt.replace(' ', '')))
         print("/trans에서의 result : ",tgtresult)
         print(source_len)
+        print(session['uid'])
     return render_template("translator.html",result=result,source_len=source_len)
 
 #저장
@@ -63,12 +64,12 @@ def saveSQL():
     email = pdinfo.iloc[2,0]
     gcp_mysql_insert.save_user_pymysql(uid,name,email)
     session['uid']=uid #uid까진 적용이 되었다
-    return ""
+    return redirect(url_for('trans'))
 
 
 @app.route('/kg')
 def show_database():
-    return render_template('kg.html',)
+    return render_template('kg.html')
 
 
 if __name__ == '__main__':

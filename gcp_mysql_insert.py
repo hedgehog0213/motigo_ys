@@ -4,7 +4,8 @@ import time
 #pymysql.connect(host='funcoding-db.ca1fydhpobsc.ap-northeast-2.rds.amazonaws.com', port=3306, user='davelee', passwd='korea123', db='student_mgmt', charset='utf8')
 
 
-
+# db 저장소 : warm-melody-377101:asia-northeast3:translation-db
+# ip : 34.64.173.250
 def save_pymysql(sourcetxt, targettxt,uid): #번역 전과 번역 후를 인덱스를 포함하여 mysql에 저장
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()

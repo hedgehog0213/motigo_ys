@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import render_template, url_for
+from flask import render_template, url_for,session
 from flask import Flask, request
 from werkzeug.utils import redirect
 import Gtrans
@@ -7,11 +7,15 @@ import Gtrans
 import google_api as gap
 import gcp_mysql_insert
 import json
+import os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
+app.config['SESSION_TYPE'] = 'filesystem'
 tgtresult = ""
 result = ""
 source_len=""
+uid=''
 
 #메인화면
 @app.route('/')
@@ -58,6 +62,7 @@ def saveSQL():
     name = pdinfo.iloc[1,0]
     email = pdinfo.iloc[2,0]
     gcp_mysql_insert.save_user_pymysql(uid,name,email)
+    session['uid']=uid #uid까진 적용이 되었다
     return ""
 
 

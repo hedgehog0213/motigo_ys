@@ -9,7 +9,7 @@ import gcp_mysql_insert
 import json
 import os
 
-#프로젝트명
+#합치기 전
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)

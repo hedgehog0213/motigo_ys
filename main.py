@@ -40,17 +40,19 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len):
         source_len=str(len(sourcetxt.replace(' ', '')))
         print("/trans에서의 result : ",tgtresult)
         print(source_len)
-        print(session['uid'])
+        #print(session['uid'])
     return render_template("translator.html",result=result,source_len=source_len)
 
 #저장
 @app.route("/save", methods=["POST"])
 def save_srctgt(sourcetxt, targettxt):
     #database.save(sourcetxt, targettxt)
-    gcp_mysql_insert.save_pymysql(sourcetxt, targettxt)
+    uid=session['uid']
+    gcp_mysql_insert.save_pymysql(sourcetxt, targettxt,uid)
     #result = database.load_result()
     result = gcp_mysql_insert.load_result_pymysql()
     print("/save에서의 result : ",result)
+    #print(session['uid'])
     # return redirect(url_for("trans"))
     return result
 

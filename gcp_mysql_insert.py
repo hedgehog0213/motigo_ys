@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 
-def save_pymysql(sourcetxt, targettxt): #번역 전과 번역 후를 인덱스를 포함하여 mysql에 저장
+def save_pymysql(sourcetxt, targettxt,uid): #번역 전과 번역 후를 인덱스를 포함하여 mysql에 저장
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql1='select count(*) from translationsource;'
@@ -15,8 +15,8 @@ def save_pymysql(sourcetxt, targettxt): #번역 전과 번역 후를 인덱스�
         for j in i:
             final = j
     index = final+1
-    sql2 = 'insert into translationsource values (%s,%s,%s,%s);'
-    data = (int(index), sourcetxt, targettxt,len(sourcetxt.replace(' ','')))
+    sql2 = 'insert into translationsource values (%s,%s,%s,%s,%s);'
+    data = (int(index), sourcetxt, targettxt,len(sourcetxt.replace(' ','')),uid)
     cur.execute(sql2, data)
     conn.commit()
     conn.close()

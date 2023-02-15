@@ -21,9 +21,15 @@ uid=''
 
 #메인화면
 
+
 @app.route('/')
-def main():
+def popauth():
     return render_template('popauth.html')
+
+@app.route('/google_demo')
+def main():
+    return render_template('google_demo.html')
+
 
 @app.route("/trans")
 def trans(tgtresult=tgtresult, result=result, source_len=source_len):
@@ -40,14 +46,14 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len):
 
         #print("/trans에서의 result : ",tgtresult)
         #print(source_len)
-        #print(session['uid'])
+        #print(session['uid']) #session['uid']가 존재하는 것 확인
     return render_template("translator.html",result=result,source_len=source_len)
 
 #저장
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
 def save_srctgt(sourcetxt, targettxt):
     #database.save(sourcetxt, targettxt)
-    #uid=session['uid']
+    uid=session['uid']
     gcp_mysql_insert.save_pymysql(sourcetxt, targettxt,uid)
     result = gcp_mysql_insert.load_result_pymysql()
     #in_up.consumption(session['uid'], len(sourcetxt.replace(' ','')))

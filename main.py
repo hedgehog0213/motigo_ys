@@ -2,8 +2,6 @@ import pandas as pd
 from flask import render_template, url_for,session
 from flask import Flask, request
 from werkzeug.utils import redirect
-#import Gtrans
-#import database
 import google_api as gap
 import gcp_mysql_insert
 import json
@@ -49,13 +47,13 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len):
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
 def save_srctgt(sourcetxt, targettxt):
     #database.save(sourcetxt, targettxt)
-    uid=session['uid']
+    #uid=session['uid']
     gcp_mysql_insert.save_pymysql(sourcetxt, targettxt,uid)
     result = gcp_mysql_insert.load_result_pymysql()
-    in_up.consumption(uid, len(sourcetxt.replace(' ','')))
+    #in_up.consumption(session['uid'], len(sourcetxt.replace(' ','')))
     #print("/save에서의 result : ",result)
     #print(session['uid'])
-    # return redirect(url_for("trans"))
+    #return redirect(url_for("trans"))
     return result
 
 @app.route("/saveSQL", methods=['POST']) #회원정보 저장

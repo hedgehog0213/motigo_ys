@@ -11,7 +11,6 @@ for i in yp:
     for j in i:
         now_point = j
 def consumption(uid,len): # consumption(소비)에 insert 및 회원정보 update
-
     final=now_point - len
     sql_update = "update user_info set point = %s where uid = %s"
     update_data=(final,uid)

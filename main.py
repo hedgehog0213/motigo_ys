@@ -39,7 +39,7 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len):
         result = whole_result[1:3]
         tgtresult = whole_result[2]
         source_len=len(sourcetxt.replace(' ', ''))
-        in_up.consumption(uid,source_len)
+
         #print("/trans에서의 result : ",tgtresult)
         #print(source_len)
         #print(session['uid'])
@@ -52,6 +52,7 @@ def save_srctgt(sourcetxt, targettxt):
     uid=session['uid']
     gcp_mysql_insert.save_pymysql(sourcetxt, targettxt,uid)
     result = gcp_mysql_insert.load_result_pymysql()
+    in_up.consumption(uid, len(sourcetxt.replace(' ','')))
     #print("/save에서의 result : ",result)
     #print(session['uid'])
     # return redirect(url_for("trans"))

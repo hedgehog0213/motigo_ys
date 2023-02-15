@@ -16,7 +16,7 @@ def save_pymysql(sourcetxt, targettxt,uid): #번역 전과 번역 후를 인덱�
             final = j
     index = final+1
     sql2 = 'insert into translationsource values (%s,%s,%s,%s,%s,%s);'
-    data = (int(index), sourcetxt, targettxt,len(sourcetxt.replace(' ','')),uid,time.strftime('%y/%m/%d - %X'))
+    data = (int(index), sourcetxt, targettxt,len(sourcetxt.replace(' ','')),uid,time.strftime('%y/%m/%d'))
     cur.execute(sql2, data)
     conn.commit()
     conn.close()
@@ -55,8 +55,8 @@ def save_user_pymysql(uid,name,email): #유저 정보를 입력받아 보자,현
         for j in i:
             u_l.append(j)
     if uid not in u_l:
-        sql2 = 'insert into user_info(uid,name,email,year,month,day) values (%s,%s,%s,%s,%s,%s)' #만약 컬럼이 추가된다면 이부분을 바꾸자
-        data = (uid,name,email,now.year,now.month,now.day)                                     #이부분도 추가 시켜줘야 한다
+        sql2 = 'insert into user_info(uid,name,email,date) values (%s,%s,%s,%s)' #만약 컬럼이 추가된다면 이부분을 바꾸자
+        data = (uid,name,email,time.strftime('%y/%m/%d'))                                     #이부분도 추가 시켜줘야 한다
         cur.execute(sql2, data)
         conn.commit()
         conn.close()

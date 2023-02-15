@@ -1,5 +1,9 @@
 import six
 from google.cloud import translate_v2 as translate
+from googletrans import Translator
+
+tr = Translator()
+
 
 translate_client = translate.Client()
 

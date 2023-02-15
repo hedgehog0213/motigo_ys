@@ -2,7 +2,7 @@ import pandas as pd
 from flask import render_template, url_for,session
 from flask import Flask, request
 from werkzeug.utils import redirect
-import Gtrans
+#import Gtrans
 #import database
 import google_api as gap
 import gcp_mysql_insert
@@ -22,11 +22,8 @@ source_len=""
 uid=''
 
 #메인화면
-@app.route('/')
-def to_pop():
-    return render_template('front.html')
 
-@app.route('/popauth')
+@app.route('/')
 def main():
     return render_template('popauth.html')
 
@@ -34,7 +31,7 @@ def main():
 def trans(tgtresult=tgtresult, result=result, source_len=source_len):
     sourcetxt = request.args.get("sourcetxt")
     if sourcetxt is not None:
-        if Gtrans.tr.translate(sourcetxt).src == 'ko':
+        if gap.tr.translate(sourcetxt).src == 'ko':
             targettxt = gap.translate_to_en_text(sourcetxt)
         else:
             targettxt = gap.translate_to_ko_text(sourcetxt)

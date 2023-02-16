@@ -17,7 +17,7 @@ tgtresult = ""
 result = ""
 source_len=""
 save_point=''
-
+paidamount=""
 uid=''
 
 #메인화면
@@ -32,9 +32,11 @@ def main():
     return render_template('google_demo.html')
 
 
-@app.route("/trans")
-def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid):
+@app.route("/trans", methods=['GET', 'POST'])
+def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paidamount=paidamount):
     sourcetxt = request.args.get("sourcetxt")
+    paidamount=request.args.get("paidamount");
+    print(paidamount)
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':
             targettxt = gap.translate_to_en_text(sourcetxt)
@@ -47,7 +49,7 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid):
         source_len=len(sourcetxt.replace(' ', ''))
 
         print("/trans까지 완료" + session['uid']) #session['uid']가 존재하는 것 확인
-    return render_template("translator.html",result=result,source_len=source_len,uid=uid)
+    return render_template("translator.html",result=result,source_len=source_len,uid=uid,)
 
 #저장
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯

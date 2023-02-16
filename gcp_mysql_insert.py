@@ -8,7 +8,7 @@ def save_pymysql(sourcetxt, targettxt,uid): #번역 전과 번역 후를 인덱�
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql2 = 'insert into translationsource values (%s,%s,%s,%s,%s);'
-    data = (sourcetxt, targettxt, len(sourcetxt.replace(' ', '')), uid, time.strftime('%y/%m/%d - %X'))
+    data = ( uid,sourcetxt, targettxt, len(sourcetxt.replace(' ', '')), time.strftime('%y/%m/%d - %X'))
     cur.execute(sql2, data)
     conn.commit()
     conn.close()

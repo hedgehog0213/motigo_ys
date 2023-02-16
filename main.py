@@ -79,20 +79,12 @@ def saveSQL():
 @app.route('/kg') # 충전 관련 ++ 여기다가 충전 관련 함수 만든후 사용하면 될듯
 def kg_pay():
     save_point = request.args.get('money')
-    uid = session['uid']
+    #uid = session['uid']
     #save_point_db(save_point,session['uid'])
     print(save_point)
     print(session['uid'])#로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
-    print(uid)
+    #print(uid)
     return render_template('kg.html')
-
-@app.route('/kg_save', methods=['POST'])
-def save_point_db():
-    in_up.save_charge(save_point,uid)
-    return redirect(url_for('trans'))
-
-
-
 
 
 @app.route('/graph_day')

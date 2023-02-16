@@ -46,6 +46,8 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paid
         tgtresult = whole_result[2]
         source_len=len(sourcetxt.replace(' ', ''))
         print("/trans까지 완료" + session['uid']) #session['uid']가 존재하는 것 확인
+
+    #session['uid']
     #paidamount = request.args.get("paidamount")
     #print(paidamount)
     #save_paidamount(paidamount)
@@ -55,8 +57,9 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paid
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
 def save_srctgt(sourcetxt, targettxt):
     #database.save(sourcetxt, targettxt)
-    #uid=session['uid']
+    session['uid']
     gcp_mysql_insert.save_pymysql(sourcetxt, targettxt, session['uid']) #session['uid']만 들어가 있어도 세션값이 넘어감
+    uid=session['uid']
     result = gcp_mysql_insert.load_result_pymysql()
     in_up.consumption(session['uid'], len(sourcetxt.replace(' ','')))
     #print("/save에서의 result : ",result)
@@ -92,8 +95,10 @@ def kg_pay():
 @app.route("/paidamount",methods=["GET","POST"])
 def save_paidamount():
     paidamount = request.args.get("paidamount")
+    uid=session['uid']
     print("결제완료금액입니다"+paidamount)
     print("paidamout에서의 "+session['uid'])
+    in_up.save_paidamount(uid,int(paidamount))
 
     return redirect(url_for('trans'))
 

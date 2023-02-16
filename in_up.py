@@ -12,7 +12,7 @@ import time
 def consumption(uid,len): # consumption(소비)에 insert 및 회원정보 update
     conn = pymysql.connect(host='34.64.173.250', user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
-    sql1 = "select final from point where uid = %s;"
+    sql1 = "SELECT final FROM point WHERE uid = %s ORDER BY DATETIME DESC LIMIT 1;"
     user_info_data=(uid)
     cur.execute(sql1,user_info_data)
     yp = cur.fetchall()
@@ -66,6 +66,8 @@ def save_charge(save_point,uid):
     cur.execute(sql_insert, insert_data)
     conn.commit()
     conn.close()
+
+
 
 
 

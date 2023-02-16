@@ -35,8 +35,6 @@ def main():
 @app.route("/trans", methods=['GET', 'POST'])
 def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paidamount=paidamount):
     sourcetxt = request.args.get("sourcetxt")
-    paidamount=request.args.get("paidamount")
-    print(paidamount)
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':
             targettxt = gap.translate_to_en_text(sourcetxt)
@@ -47,8 +45,10 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paid
         result = whole_result[1:3]
         tgtresult = whole_result[2]
         source_len=len(sourcetxt.replace(' ', ''))
-
         print("/trans까지 완료" + session['uid']) #session['uid']가 존재하는 것 확인
+    #paidamount = request.args.get("paidamount")
+    #print(paidamount)
+    #save_paidamount(paidamount)
     return render_template("translator.html",result=result,source_len=source_len,uid=uid,)
 
 #저장
@@ -63,6 +63,7 @@ def save_srctgt(sourcetxt, targettxt):
     print("/save까지 완료 with" + session['uid'])
     #return redirect(url_for("trans"))
     return result
+
 
 @app.route("/saveSQL", methods=['POST']) #회원정보 저장
 def saveSQL():
@@ -83,10 +84,18 @@ def kg_pay():
     save_point = request.args.get('money')
     #uid = session['uid']
     #save_point_db(save_point,session['uid'])
-    print(save_point)
-    print(session['uid'])#로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
+    #print(save_point)
+    print("결제창에서의"+session['uid'])#로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
     #print(uid)
     return render_template('kg.html')
+
+@app.route("/paidamount",methods=["GET","POST"])
+def save_paidamount():
+    paidamount = request.args.get("paidamount")
+    print("결제완료금액입니다"+paidamount)
+    print("paidamout에서의 "+session['uid'])
+
+    return redirect(url_for('trans'))
 
 
 @app.route('/graph_day')

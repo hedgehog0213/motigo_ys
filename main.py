@@ -35,7 +35,7 @@ def main():
 @app.route("/trans", methods=['GET', 'POST'])
 def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paidamount=paidamount):
     sourcetxt = request.args.get("sourcetxt")
-    paidamount=request.args.get("paidamount");
+    paidamount=request.args.get("paidamount")
     print(paidamount)
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':

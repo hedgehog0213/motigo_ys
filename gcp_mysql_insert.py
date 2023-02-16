@@ -7,16 +7,17 @@ import time
 def save_pymysql(sourcetxt, targettxt,uid): #번역 전과 번역 후를 인덱스를 포함하여 mysql에 저장
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
-    sql1='select count(*) from translationsource;'
-    cur.execute(sql1)
-    last_num=cur.fetchall()
-    final=0
-    for i in last_num :
-        for j in i:
-            final = j
-    index = final+1
-    sql2 = 'insert into translationsource values (%s,%s,%s,%s,%s,%s);'
-    data = (int(index), sourcetxt, targettxt,len(sourcetxt.replace(' ','')),uid,time.strftime('%y/%m/%d'))
+    #sql1='select count(*) from translationsource;'
+    #cur.execute(sql1)
+    #last_num=cur.fetchall()
+    #final=0
+    #for i in last_num :
+    #    for j in i:
+    #        final = j
+    #index = final+1
+    sql2 = 'insert into translationsource(source,target,len,uid,datetime) values (%s,%s,%s,%s,%s);'
+    #data = (int(index), sourcetxt, targettxt,len(sourcetxt.replace(' ','')),uid,time.strftime('%y/%m/%d - %X'))
+    data = (sourcetxt, targettxt, len(sourcetxt.replace(' ', '')), uid, time.strftime('%y/%m/%d - %X'))
     cur.execute(sql2, data)
     conn.commit()
     conn.close()
@@ -29,7 +30,7 @@ def load_result_pymysql(): #마지막으로 저장된 인덱스를 값으로 하
 
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
-    sql1='select * from translationsource order by 1 desc limit 1;'
+    sql1='SELECT * FROM translationsource ORDER BY DATETIME DESC LIMIT 1;;'
     cur.execute(sql1)
     all_fetch=cur.fetchall()
     conn.commit()
@@ -55,10 +56,11 @@ def save_user_pymysql(uid,name,email): #유저 정보를 입력받아 보자,현
         for j in i:
             u_l.append(j)
     if uid not in u_l:
-        sql2 = 'insert into user_info(uid,name,email,date) values (%s,%s,%s,%s)' #만약 컬럼이 추가된다면 이부분을 바꾸자
-        data = (uid,name,email,time.strftime('%y/%m/%d'))                                     #이부분도 추가 시켜줘야 한다
+        sql2 = 'insert into user_info(uid,name,email,datetime) values (%s,%s,%s,%s)' #만약 컬럼이 추가된다면 이부분을 바꾸자
+        data = (uid,name,email,time.strftime('%y/%m/%d - %X'))                                     #이부분도 추가 시켜줘야 한다
         cur.execute(sql2, data)
         conn.commit()
         conn.close()
+        print(uid+'의 회원가입을 완료하였습니다')
     else:
-        print('이미 회원가입이 완료 되었습니다')
+        print('회원 정보가 이미 있습니다')

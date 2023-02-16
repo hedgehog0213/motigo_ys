@@ -16,6 +16,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 tgtresult = ""
 result = ""
 source_len=""
+save_point=''
 
 uid=''
 
@@ -40,21 +41,13 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid):
         else:
             targettxt = gap.translate_to_ko_text(sourcetxt)
         whole_result = save_srctgt(sourcetxt, targettxt)
-        uid = session['uid']
-        #save_second(uid,sourcetxt)
+        #uid = session['uid'] #번역 과정에서 이친구가 문제가 생겼다
         result = whole_result[1:3]
         tgtresult = whole_result[2]
         source_len=len(sourcetxt.replace(' ', ''))
 
-        #print("/trans에서의 result : ",tgtresult)
-        #print(source_len)
         print("/trans까지 완료" + session['uid']) #session['uid']가 존재하는 것 확인
     return render_template("translator.html",result=result,source_len=source_len,uid=uid)
-
-#@app.route("/save_second", methods=["POST"])
-#def save_second(uid,sourcetxt):
-#    print("여기까지는 진행이 되었습니다")
-#    in_up.consumption(uid,len(sourcetxt.replace(' ','')))
 
 #저장
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
@@ -85,8 +78,22 @@ def saveSQL():
 
 @app.route('/kg') # 충전 관련 ++ 여기다가 충전 관련 함수 만든후 사용하면 될듯
 def kg_pay():
+    save_point = request.args.get('money')
+    uid = session['uid']
+    #save_point_db(save_point,session['uid'])
+    print(save_point)
     print(session['uid'])#로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
+    print(uid)
     return render_template('kg.html')
+
+@app.route('/kg_save', methods=['POST'])
+def save_point_db():
+    in_up.save_charge(save_point,uid)
+    return redirect(url_for('trans'))
+
+
+
+
 
 @app.route('/graph_day')
 def show_graph_day():

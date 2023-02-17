@@ -20,6 +20,7 @@ save_point=''
 paidamount=""
 uid=''
 
+
 #메인화면
 
 
@@ -95,7 +96,6 @@ def save_paidamount():
     print("결제완료금액입니다"+paidamount)
     print("paidamout에서의 "+session['uid'])
     in_up.save_paidamount(uid,int(paidamount))
-
     return redirect(url_for('trans'))
 
 

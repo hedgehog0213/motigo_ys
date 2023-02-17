@@ -51,7 +51,7 @@ def save_user_pymysql(uid,name,email): #유저 정보를 입력받아 보자,현
         data = (uid,name,email,time.strftime('%y/%m/%d - %X'))                                     #이부분도 추가 시켜줘야 한다
         cur.execute(sql_user_info, data)
         conn.commit()
-        sql_point_basic = "insert into point(uid,division,point,final,datetime) values (%s,'충전',1000,1000,%s)"
+        sql_point_basic = "insert into point(uid,division,point,final,datetime) values (%s,'무료충전',1000,1000,%s)"
         data_sql_point_basic = (uid,time.strftime('%y/%m/%d - %X'))
         cur.execute(sql_point_basic,data_sql_point_basic)
         conn.commit()

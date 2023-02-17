@@ -32,7 +32,7 @@ def main():
     return render_template('google_demo.html')
 
 
-@app.route("/trans", methods=['GET', 'POST'])
+@app.route("/trans", methods=['GET', 'POST'],)
 def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paidamount=paidamount):
     sourcetxt = request.args.get("sourcetxt")
     if sourcetxt is not None:
@@ -41,21 +41,17 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paid
         else:
             targettxt = gap.translate_to_ko_text(sourcetxt)
         whole_result = save_srctgt(sourcetxt, targettxt)
-        #uid = session['uid'] #번역 과정에서 이친구가 문제가 생겼다
         result = whole_result[1:3]
         tgtresult = whole_result[2]
         source_len=len(sourcetxt.replace(' ', ''))
         print("/trans까지 완료" + session['uid']) #session['uid']가 존재하는 것 확인
-
-    #session['uid']
-    #paidamount = request.args.get("paidamount")
-    #print(paidamount)
-    #save_paidamount(paidamount)
-    return render_template("translator.html",result=result,source_len=source_len,uid=uid,)
+    #uid=session['uid']
+    #print("trans에서의 세션값 입니다"+uid)
+    return render_template("translator.html",result=result,source_len=source_len,uid=uid)
 
 #저장
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
-def save_srctgt(sourcetxt, targettxt):
+def save_srctgt(sourcetxt, targettxt,uid=uid):
     #database.save(sourcetxt, targettxt)
     session['uid']
     gcp_mysql_insert.save_pymysql(sourcetxt, targettxt, session['uid']) #session['uid']만 들어가 있어도 세션값이 넘어감

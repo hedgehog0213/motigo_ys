@@ -62,10 +62,11 @@
             url:"/saveSQL",
             type:"POST",
             contentType: "application/json",
-            data: JSON.stringify(j)});
-
-            let link = 'trans';
-            location.href = link;
+            data: JSON.stringify(j),
+            success:function(data){
+              alert(username+"님 환영합니다");
+              window.location.href = "/trans";
+          }});
 
 
 		}).catch(function(error) {

@@ -5,9 +5,12 @@
     <title>Title</title>
 </head>
 <body>
- <select name="job">
-        <option >직업선택</option>
+<form action="/tr_info" method="POST">
+    <select id="email" name="selected_value">
+        <option >이메일 선택</option>
         {% for email in distinct_email %}<option value="{{email}}">{{email}}</option>{% endfor %}
     </select>
+    <input type="submit" value="Submit">
+</form>
 </body>
 </html>

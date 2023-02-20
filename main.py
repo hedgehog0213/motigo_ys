@@ -130,7 +130,13 @@ def tr_select():
     distinct_email=gcp_mysql_insert.load_distinct_email()
     return render_template('tr_select.html',distinct_email=distinct_email)
 
-
+@app.route('/tr_info',methods=['POST'])
+def tr_info():
+    target_email=request.form['selected_value']
+    #translatinsource_list_DataFrame=gcp_mysql_insert.load_tr_list(target_email)
+    #return render_template('translation_list.html',tables=[translatinsource_list_DataFrame.to_html(classes='data')],titles=translatinsource_list_DataFrame.columns.values)
+    print(target_email)
+    #return print(target_email)
 
 if __name__ == '__main__':
     app.run()

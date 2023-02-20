@@ -128,8 +128,24 @@ def load_distinct_email():
     sql_distinct_email="select distinct(email) from user_info;"
     cur.execute(sql_distinct_email)
     de_bd=cur.fetchall()
+    conn.commit()
+    conn.close()
     distinct_email=[]
     for i in de_bd:
         for j in i:
             distinct_email.append(j)
     return distinct_email
+
+def load_tr_list(target_email):
+    conn = pymysql.connect(host='34.64.173.250', user='root', password='mococo1$', db='for_prac', charset='utf8')
+    cur = conn.cursor()
+    sql_tr_info="SELECT u.email, t.source, t.target, t.len, t.datetime FROM  translationsource t JOIN user_info u ON u.uid=t.uid WHERE u.email=%s AND u.type != 'admin';"
+    sql_tr_info_data=(target_email)
+    cur.execute(sql_tr_info,sql_tr_info_data)
+    tl_bd=cur.fetchall()
+    conn.commit()
+    conn.close()
+    translatinsource_list_DataFrame = pd.DataFrame(tl_bd, columns=['email', 'source', 'target', 'point','datetime'])
+    print(translatinsource_list_DataFrame)
+    return translatinsource_list_DataFrame
+

@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import render_template, url_for,session
+from flask import render_template, url_for,session,flash
 from flask import Flask, request
 from werkzeug.utils import redirect
 import google_api as gap
@@ -50,11 +50,23 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paid
     #print("trans에서의 세션값 입니다"+uid)
     return render_template("translator.html",result=result,source_len=source_len,uid=uid)
 
+@app.route("/move_admin") #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
+def move_admin():
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    # print(now_type)
+    if now_type != "admin":
+        flash("관리자가 아닙니다")
+        return redirect(url_for('trans'))
+    else:
+        return redirect(url_for('tr_select'))
+
+
+
 #저장
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
 def save_srctgt(sourcetxt, targettxt,uid=uid):
     #database.save(sourcetxt, targettxt)
-    session['uid']
+    #session['uid']
     gcp_mysql_insert.save_pymysql(sourcetxt, targettxt, session['uid']) #session['uid']만 들어가 있어도 세션값이 넘어감
     uid=session['uid']
     result = gcp_mysql_insert.load_result_pymysql()
@@ -130,12 +142,12 @@ def tr_select():
     distinct_email=gcp_mysql_insert.load_distinct_email()
     return render_template('tr_select.html',distinct_email=distinct_email)
 
-@app.route('/tr_info',methods=['POST'])
+@app.route('/tr_list',methods=['POST'])
 def tr_info():
     target_email=request.form['selected_value']
-    #translatinsource_list_DataFrame=gcp_mysql_insert.load_tr_list(target_email)
-    #return render_template('translation_list.html',tables=[translatinsource_list_DataFrame.to_html(classes='data')],titles=translatinsource_list_DataFrame.columns.values)
-    print(target_email)
+    translatinsource_list_DataFrame=gcp_mysql_insert.load_tr_list(target_email)
+    return render_template('translation_list.html',tables=[translatinsource_list_DataFrame.to_html(classes='data')],titles=translatinsource_list_DataFrame.columns.values)
+    #print(target_email)
     #return print(target_email)
 
 if __name__ == '__main__':

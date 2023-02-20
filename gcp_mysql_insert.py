@@ -1,6 +1,7 @@
 import pymysql
 from datetime import datetime
 import time
+import pandas as pd
 
 # db 저장소 : warm-melody-377101:asia-northeast3:translation-db
 # ip : 34.64.173.250
@@ -76,7 +77,47 @@ def load_user_list(): #마지막으로 저장된 인덱스를 값으로 하여 �
     bd=cur.fetchall()
     conn.commit()
     conn.close()
-    user_DataFrame=pd.DataFrame(bd)
+    user_DataFrame=pd.DataFrame(bd,columns=['email','name','type','sign_up_date'])
+    user_html=user_DataFrame.to_html()
     print(user_DataFrame)
     return user_DataFrame
 
+def check_admin(uid):
+    conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
+    cur = conn.cursor()
+    sql_check_admin = "SELECT TYPE FROM user_info WHERE uid=%s;"
+    check_admin_data=(uid)
+    cur.execute(sql_check_admin,check_admin_data)
+    bf=cur.fetchall()
+    now_type=""
+    for i in bf:
+        for j in i:
+            now_type=j
+
+    return now_type
+
+
+def load_user_translationsource(uid):
+    conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
+    cur = conn.cursor()
+    sql_user_translationsource="SELECT u.name,t.datetime, t.source, t.target, t.len FROM translationsource t JOIN user_info u ON t.uid=u.uid WHERE t.uid=%s"
+    sql_user_translationsource_data=(uid)
+    cur.execute(sql_user_translationsource,sql_user_translationsource_data)
+    tr_bd=cur.fetchall()
+    conn.commit()
+    conn.close()
+    translation_DataFrame=pd.DataFrame(tr_bd,columns=['name','datetime','source','target','point'])
+    print(translation_DataFrame)
+    return translation_DataFrame
+
+def load_charge_point():
+    conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
+    cur = conn.cursor()
+    sql_charge_point="SELECT u.name,u.email, p.point, p.datetime FROM point p JOIN user_info u ON u.uid=p.uid  WHERE p.division='충전';"
+    cur.execute(sql_charge_point)
+    cp_bd=cur.fetchall()
+    conn.commit()
+    conn.close()
+    charge_point_DataFrame=pd.DataFrame(cp_bd,columns=['name','email','point','datetime'])
+    print(charge_point_DataFrame)
+    return charge_point_DataFrame

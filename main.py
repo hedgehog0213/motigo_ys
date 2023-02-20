@@ -103,10 +103,28 @@ def save_paidamount():
 def show_graph_day():
     return render_template('graph.html')
 
-@app.route('/list')
+@app.route('/user_list')
 def user_list():
-    user_list=gcp_mysql_insert.load_user_list()
-    return render_template('list.html',user_list=user_list)
+    now_type=gcp_mysql_insert.check_admin(session['uid'])
+    #print(now_type)
+    if now_type == "admin":
+        user_list = gcp_mysql_insert.load_user_list()
+        return render_template('user_list.html', tables=[user_list.to_html(classes='data')],
+                               titles=user_list.columns.values)
+    else:
+        return render_template("return.html")
+
+@app.route('/charge_list')
+def charge_point():
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    if now_type == "admin":
+        charge_list = gcp_mysql_insert.load_charge_point()
+        return render_template('charge_list.html', tables=[charge_list.to_html(classes='data')],titles=charge_list.columns.values)
+    else:
+        return render_template("return.html")
+
+
+
 
 
 if __name__ == '__main__':

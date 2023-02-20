@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <title>My DataFrame</title>
+    <style>
+      .data {
+        border-collapse: collapse;
+        border: 2px solid black;
+        margin: 25px 0;
+        font-size: 0.9em;
+        font-family: sans-serif;
+        min-width: 400px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        text-align: center;
+      }
+
+      .data thead tr {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: center;
+      }
+
+      .data th,
+      .data td {
+        padding: 12px 15px;
+        text-align: center;
+      }
+
+      .data tbody tr {
+        border-bottom: 1px solid #dddddd;
+        text-align: center;
+      }
+
+      .data tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>회원정보</h1>
+    {{ tables[0]|safe }}
+  </body>
+</html>

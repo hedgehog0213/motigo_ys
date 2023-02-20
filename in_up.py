@@ -57,7 +57,7 @@ def save_paidamount(uid,paidamount): # consumption(소비)에 insert 및 회원�
         sql_type_update_data = (uid)
         cur.execute(sql_type_update,sql_type_update_data)
         conn.commit()
-        conn.close
+        conn.close()
     else:
         print('이미 유료회원 입니다')
     conn.close()

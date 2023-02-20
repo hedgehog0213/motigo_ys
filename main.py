@@ -103,5 +103,11 @@ def save_paidamount():
 def show_graph_day():
     return render_template('graph.html')
 
+@app.route('/list')
+def user_list():
+    user_list=gcp_mysql_insert.load_user_list()
+    return render_template('list.html',user_list=user_list)
+
+
 if __name__ == '__main__':
     app.run()

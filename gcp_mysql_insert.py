@@ -61,3 +61,22 @@ def save_user_pymysql(uid,name,email): #유저 정보를 입력받아 보자,현
         print(uid+'에게 기본포인트 1000을 증정했습니다')
     else:
         print('회원 정보가 이미 있습니다')
+
+
+
+def load_user_list(): #마지막으로 저장된 인덱스를 값으로 하여 번역 정보를 불러 온다.
+
+    #df = pd.read_csv("database.csv")
+    #result_list.append(df.iloc[-1].tolist())
+
+    conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
+    cur = conn.cursor()
+    sql1="SELECT email,NAME,TYPE,SUBSTR(DATETIME,1,10) AS '가입일자' FROM user_info;"
+    cur.execute(sql1)
+    bd=cur.fetchall()
+    conn.commit()
+    conn.close()
+    user_DataFrame=pd.DataFrame(bd)
+    print(user_DataFrame)
+    return user_DataFrame
+

@@ -121,3 +121,15 @@ def load_charge_point():
     charge_point_DataFrame=pd.DataFrame(cp_bd,columns=['name','email','point','datetime'])
     print(charge_point_DataFrame)
     return charge_point_DataFrame
+
+def load_distinct_email():
+    conn = pymysql.connect(host='34.64.173.250', user='root', password='mococo1$', db='for_prac', charset='utf8')
+    cur = conn.cursor()
+    sql_distinct_email="select distinct(email) from user_info;"
+    cur.execute(sql_distinct_email)
+    de_bd=cur.fetchall()
+    distinct_email=[]
+    for i in de_bd:
+        for j in i:
+            distinct_email.append(j)
+    return distinct_email

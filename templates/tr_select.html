@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+ <select name="job">
+        <option >직업선택</option>
+        {% for email in distinct_email %}<option value="{{email}}">{{email}}</option>{% endfor %}
+    </select>
+</body>
+</html>

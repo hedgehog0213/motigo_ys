@@ -125,6 +125,11 @@ def charge_point():
 
 
 
+@app.route('/tr_select')
+def tr_select():
+    distinct_email=gcp_mysql_insert.load_distinct_email()
+    return render_template('tr_select.html',distinct_email=distinct_email)
+
 
 
 if __name__ == '__main__':

@@ -46,6 +46,13 @@
           }
       })
 </script>
+<script>
+    function countChars(obj){
+        var message = obj.value.replace(/\s+/g, '');
+        var len = message.length;
+          document.getElementById("charNum").innerHTML = len+' characters';
+    }
+  </script>
   <style>
     .move{
     position: absolute;

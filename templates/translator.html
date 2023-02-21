@@ -24,6 +24,12 @@
 
   // Initialize Firebase
 	firebase.initializeApp(firebaseConfig);
+
+  function countChars(obj){
+          var message = obj.value.replace(/\s+/g, '');
+          var len = message.length;
+            document.getElementById("charNum").innerHTML = len+' characters';
+      }
 </script>
   <style>
     .move{
@@ -40,7 +46,8 @@
     <form action="/trans" method="get">
         <div class="row align-items-center">
           <div class="col">
-            <textarea placeholder="번역할 것을 적어주세요" rows=10 cols=30 name="sourcetxt"></textarea>
+            <textarea placeholder="번역할 것을 적어주세요" rows=10 cols=30 name="sourcetxt" onkeyup="countChars(this);"></textarea>
+            <p id="charNum">0 characters</p>
           </div>
           <div class="col">
             <button class="btn btn-warning">번역</button>

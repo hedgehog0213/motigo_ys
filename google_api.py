@@ -1,6 +1,10 @@
 import six
 from google.cloud import translate_v2 as translate
 from googletrans import Translator
+import os
+
+credential_path = "warm-melody-377101-5b3efaefaed9.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 tr = Translator()
 

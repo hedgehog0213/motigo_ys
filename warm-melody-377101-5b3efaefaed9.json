@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "warm-melody-377101",
+  "private_key_id": "5b3efaefaed98d278214a7798ccfac2f6dafeb3e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCzoe9s/lfJwYiW\nJQWEoTy1nvdeHeo+ufmHRlIbIprYvRlbRzx4iRO28llPPwOihjXfyTzUqFvR2uiE\np0rHcBIYmPZDxIS/aVpL9HkVKrWF0982EXIz2mD/tVs73iCR+yolrzoXezhJXugB\nbGV8LQb0F0OkAIbtTuRtThbW3LLq8C0wOP9o2GOd96NNxAmTVhjeEJjXqfTFegi6\nm7AdKU/fiuFBG1R296O9Q+KErc6mySscypaGYRypEoNUAE0YZIFHSaIBJNcQOftO\nI6u/MN65oSoks/c/Yc9dSXYpo2VcYz/W/NDbun8RUGXoG3REv7KXMLjfZbjVK/7t\naF5D3Ek1AgMBAAECggEAHYHs0BUpu5EojC1xrhtEWztNPC8i0wH+vNtu0llJYXAS\nsb1OcChoTiWaSRu7T5/HSscGUJKFXsAccOoALSm6N0MtNO2btsuqEw8KMtFstxqa\nMIoGHgFx7J9QaNGwvPoqrr0NiFzr3pWR++Xf99l3qnIF4PNbNrE+cbwhoVLoqxHZ\nGzE49o+B1tARefIskdy6WTSC/Sru6EjOURuBH4j9gW71Z4Qd6WAHahSFv9CfbiIp\n3+LoxTYlPNryG5x3H7rkG5cDLv+ZTS2BBB/vXfNLLkL21XpbEHbF2/uulck67gWq\nHpb7FVuN/WpAV9lbBnDVFb9lQ2vDd6JwU62nrt0aEwKBgQDwHMbbooPrpldR/8Qc\nXS45QFnbGaQUsfeNDA6obp6MJRprAIx6nUw+UQz5k/0E6vZOSUgy9C8YKSbQ3c8P\nga66B2qhNVQyVXqXorT5vA/JAuDjdgRW9DrKeMicObhJN5lM9+bWWj798yHtEM96\n3xFkX0x10mFNfMUIPYRWyRP3DwKBgQC/hLNaDpXOPoQAQ2PxieB7X93CTb/FY+dX\nmSdIgRWjCHYT6XboFSTVAZaFJxbwjEMaOV/qpgqgtVNRYT2fy0lb2V2x1eQQd/SF\nOD6vNX2h1ZDqqAwIbdO5H95Hrly8ZpjK84KcoKR04kxwrqQFe2s8AE6gy26rZfV2\n1TmpwGobewKBgBbWFc+jyDosStfApI0yC4hkZ2dgK+vP9URT5jz8sFWR3c5ZcgLj\nXPH8UWiXO5QxKJXPgG9gK+53U3q/7caCxfRpainE4aob2Rn83ot16GZswKjBe64t\ncj35eNLq5m0IPatFVI4EbUNH0W0zkRgViRjru2DlTl3JRRAAkcqTOzPfAoGBALXx\nJ0HC4WZR1a06WFQ6m9wZMt9IZYrsYfbCNKOYnimH/ETmYmQQ0jDZlVlhzVUwqv7a\nythsbWRHXqPNMXIA+ewcD/rGLCfJDa8Rw9tHgdagwU9r3iKT07PnJpAKgWcqQLVt\nqQOLSTERW3UhNAlROoqB8DCpkrWZ4xvFbUZq2WLJAoGBAIM4MHqQ7cK25zem4vA9\nVLK61eDL69kCuVxpUrtjELRlOxxbO2jrAjovMtKzON3fatG89cuEYSEwVcPkQBcs\nkPaExIncD0kVB3Zuuh3bi+5X/2sZsj/rXcmwDSR7eqcZV7qzPSV/tEVZmFSZjBhE\nouIMKlmGrgOep0td/M57iEgF\n-----END PRIVATE KEY-----\n",
+  "client_email": "service-account-for-transl-590@warm-melody-377101.iam.gserviceaccount.com",
+  "client_id": "111366234867539490318",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/service-account-for-transl-590%40warm-melody-377101.iam.gserviceaccount.com"
+}

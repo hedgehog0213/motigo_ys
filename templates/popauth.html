@@ -29,7 +29,7 @@
 	// Initialize Firebase
 	firebase.initializeApp(firebaseConfig);
 
-	        var provider = new firebase.auth.GoogleAuthProvider();
+        var provider = new firebase.auth.GoogleAuthProvider();
 
 	function authpop() {
 		firebase.auth().signInWithPopup(provider).then(function(result) {

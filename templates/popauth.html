@@ -28,19 +28,13 @@
 
 	// Initialize Firebase
 	firebase.initializeApp(firebaseConfig);
-	
+
 	        var provider = new firebase.auth.GoogleAuthProvider();
-	        var uid = firebase.auth().currentUser.uid
-            var username = firebase.auth().currentUser.displayName
-            var email = firebase.auth().currentUser.email
-            var createdate = firebase.auth().currentUser.metadata.creationTime
-	function authpop() {				
+
+	function authpop() {
 		firebase.auth().signInWithPopup(provider).then(function(result) {
-			// This gives you a Google Access Token. You can use it to access the Google API.
 			var token = result.credential.accessToken;
-			// The signed-in user info.
 			var user = result.user;
-			// ...
 
             var uid = firebase.auth().currentUser.uid
             var username = firebase.auth().currentUser.displayName
@@ -87,10 +81,6 @@
                   // An error happened.
         });
     }
-
-
-
-
 </script>
 
 <button type="button" onclick="authpop()">구글 계정으로 로그인하기</button>

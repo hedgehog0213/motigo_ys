@@ -4,6 +4,7 @@ import time
 import pandas as pd
 
 # db 저장소 : warm-melody-377101:asia-northeast3:translation-db
+# db 이름 : for_prac
 # ip : 34.64.173.250
 def save_pymysql(sourcetxt, targettxt,uid): #번역 전과 번역 후를 인덱스를 포함하여 mysql에 저장
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
@@ -68,14 +69,14 @@ def save_user_pymysql(uid,name,email): #유저 정보를 입력받아 보자,현
 def load_user_list(): #유저 정보 가져오기
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
-    sql1="SELECT email,NAME,TYPE,SUBSTR(DATETIME,1,10) AS '가입일자' FROM user_info;"
+    sql1="SELECT email,NAME,TYPE,SUBSTR(DATETIME,1,10) AS '가입일자' FROM user_info order by 3 desc,4,1;"
     cur.execute(sql1)
     bd=cur.fetchall()
     conn.commit()
     conn.close()
     user_DataFrame=pd.DataFrame(bd,columns=['email','name','type','sign_up_date'])
     user_html=user_DataFrame.to_html()
-    print(user_DataFrame)
+    #print(user_DataFrame)
     return user_DataFrame
 
 def check_admin(uid): # 특정 uid의 type(유료,무료,관리자)가져오기
@@ -103,7 +104,7 @@ def load_user_translationsource(uid): #특정 유저의 번역 정보 가져오�
     conn.commit()
     conn.close()
     translation_DataFrame=pd.DataFrame(tr_bd,columns=['name','datetime','source','target','point'])
-    print(translation_DataFrame)
+    #print(translation_DataFrame)
     return translation_DataFrame
 
 def load_charge_point(): #특정 유저의 결제(충전) 정보 가져오기
@@ -115,7 +116,7 @@ def load_charge_point(): #특정 유저의 결제(충전) 정보 가져오기
     conn.commit()
     conn.close()
     charge_point_DataFrame=pd.DataFrame(cp_bd,columns=['name','email','point','datetime'])
-    print(charge_point_DataFrame)
+    #print(charge_point_DataFrame)
     return charge_point_DataFrame
 
 def load_distinct_email(): #등록된 고유 이메일 정보 가져오기
@@ -135,13 +136,13 @@ def load_distinct_email(): #등록된 고유 이메일 정보 가져오기
 def load_tr_list(target_email): #관리자가 아닌 특정 사용자의 번역정보 가져오기
     conn = pymysql.connect(host='34.64.173.250', user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
-    sql_tr_info="SELECT u.email, t.source, t.target, t.len, t.datetime FROM  translationsource t JOIN user_info u ON u.uid=t.uid WHERE u.email=%s AND u.type != 'admin';"
+    sql_tr_info="SELECT u.email, t.source, t.target, t.len, t.datetime FROM  translationsource t JOIN user_info u ON u.uid=t.uid WHERE u.email=%s;" # AND u.type != 'admin'"
     sql_tr_info_data=(target_email)
     cur.execute(sql_tr_info,sql_tr_info_data)
     tl_bd=cur.fetchall()
     conn.commit()
     conn.close()
     translatinsource_list_DataFrame = pd.DataFrame(tl_bd, columns=['email', 'source', 'target', 'point','datetime'])
-    print(translatinsource_list_DataFrame)
+    #print(translatinsource_list_DataFrame)
     return translatinsource_list_DataFrame
 

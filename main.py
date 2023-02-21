@@ -50,7 +50,7 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paid
     #print("trans에서의 세션값 입니다"+uid)
     return render_template("translator.html",result=result,source_len=source_len,uid=uid)
 
-@app.route("/move_admin") #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
+@app.route("/move_admin")
 def move_admin():
     now_type = gcp_mysql_insert.check_admin(session['uid'])
     # print(now_type)
@@ -112,7 +112,13 @@ def save_paidamount():
 
 @app.route('/dash_board')
 def dash_board():
-    return render_template('graph.html')
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    # print(now_type)
+    if now_type != "admin":
+        return redirect(url_for('trans'))
+    else:
+        return render_template('graph.html')
+
 
 @app.route('/user_list')
 def user_list():
@@ -123,7 +129,7 @@ def user_list():
         return render_template('user_list.html', tables=[user_list.to_html(classes='data')],
                                titles=user_list.columns.values)
     else:
-        return render_template("return.html")
+        return redirect(url_for('trans'))
 
 @app.route('/charge_list')
 def charge_point():
@@ -132,22 +138,37 @@ def charge_point():
         charge_list = gcp_mysql_insert.load_charge_point()
         return render_template('charge_list.html', tables=[charge_list.to_html(classes='data')],titles=charge_list.columns.values)
     else:
-        return render_template("return.html")
+        return redirect(url_for('trans'))
 
 
 
 @app.route('/tr_select')
 def tr_select():
-    distinct_email=gcp_mysql_insert.load_distinct_email()
-    return render_template('tr_select.html',distinct_email=distinct_email)
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    if now_type == "admin":
+        distinct_email = gcp_mysql_insert.load_distinct_email()
+        return render_template('tr_select.html', distinct_email=distinct_email)
+    else:
+        return redirect(url_for('trans'))
+
+
+
+
 
 @app.route('/tr_list',methods=['POST'])
 def tr_info():
-    target_email=request.form['selected_value']
-    translatinsource_list_DataFrame=gcp_mysql_insert.load_tr_list(target_email)
-    return render_template('translation_list.html',tables=[translatinsource_list_DataFrame.to_html(classes='data')],titles=translatinsource_list_DataFrame.columns.values)
-    #print(target_email)
-    #return print(target_email)
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    if now_type == "admin":
+        target_email = request.form['selected_value']
+        translatinsource_list_DataFrame = gcp_mysql_insert.load_tr_list(target_email)
+        return render_template('translation_list.html',
+                               tables=[translatinsource_list_DataFrame.to_html(classes='data')],
+                               titles=translatinsource_list_DataFrame.columns.values)
+    else:
+        return redirect(url_for('trans'))
+
+
+
 
 
 @app.route('/administrator')
@@ -156,7 +177,7 @@ def administrator():
     if now_type == "admin":
         return render_template('administrator.html')
     else:
-        return render_template("return.html")
+        return redirect(url_for('trans'))
 
 
 

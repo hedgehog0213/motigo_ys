@@ -9,7 +9,7 @@ import time
 #for i in yp:
 #    for j in i:
 #        now_point = j
-def consumption(uid,len): # consumption(소비)에 insert 및 회원정보 update
+def consumption(uid,len): #가장 최근의 포인트 불러오고 소비 포인트까지 연산한뒤 새로이 저장
     conn = pymysql.connect(host='34.64.173.250', user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql1 = "SELECT final FROM point WHERE uid = %s ORDER BY DATETIME DESC LIMIT 1;"
@@ -27,7 +27,7 @@ def consumption(uid,len): # consumption(소비)에 insert 및 회원정보 updat
     conn.commit()
     conn.close()
 
-def save_paidamount(uid,paidamount): # consumption(소비)에 insert 및 회원정보 update
+def save_paidamount(uid,paidamount): #결제 정보 db에 저장 및 무료회원이 충전했을 경우 유료회원으로 바꾸기
     conn = pymysql.connect(host='34.64.173.250', user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql1 = "SELECT final FROM point WHERE uid = %s ORDER BY DATETIME DESC LIMIT 1;"

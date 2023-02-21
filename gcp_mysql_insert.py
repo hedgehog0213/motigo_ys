@@ -65,11 +65,7 @@ def save_user_pymysql(uid,name,email): #유저 정보를 입력받아 보자,현
 
 
 
-def load_user_list(): #마지막으로 저장된 인덱스를 값으로 하여 번역 정보를 불러 온다.
-
-    #df = pd.read_csv("database.csv")
-    #result_list.append(df.iloc[-1].tolist())
-
+def load_user_list(): #유저 정보 가져오기
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql1="SELECT email,NAME,TYPE,SUBSTR(DATETIME,1,10) AS '가입일자' FROM user_info;"
@@ -82,7 +78,7 @@ def load_user_list(): #마지막으로 저장된 인덱스를 값으로 하여 �
     print(user_DataFrame)
     return user_DataFrame
 
-def check_admin(uid):
+def check_admin(uid): # 특정 uid의 type(유료,무료,관리자)가져오기
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql_check_admin = "SELECT TYPE FROM user_info WHERE uid=%s;"
@@ -97,7 +93,7 @@ def check_admin(uid):
     return now_type
 
 
-def load_user_translationsource(uid):
+def load_user_translationsource(uid): #특정 유저의 번역 정보 가져오기
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql_user_translationsource="SELECT u.name,t.datetime, t.source, t.target, t.len FROM translationsource t JOIN user_info u ON t.uid=u.uid WHERE t.uid=%s"
@@ -110,7 +106,7 @@ def load_user_translationsource(uid):
     print(translation_DataFrame)
     return translation_DataFrame
 
-def load_charge_point():
+def load_charge_point(): #특정 유저의 결제(충전) 정보 가져오기
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql_charge_point="SELECT u.name,u.email, p.point, p.datetime FROM point p JOIN user_info u ON u.uid=p.uid  WHERE p.division='충전';"
@@ -122,7 +118,7 @@ def load_charge_point():
     print(charge_point_DataFrame)
     return charge_point_DataFrame
 
-def load_distinct_email():
+def load_distinct_email(): #등록된 고유 이메일 정보 가져오기
     conn = pymysql.connect(host='34.64.173.250', user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql_distinct_email="select distinct(email) from user_info;"
@@ -136,7 +132,7 @@ def load_distinct_email():
             distinct_email.append(j)
     return distinct_email
 
-def load_tr_list(target_email):
+def load_tr_list(target_email): #관리자가 아닌 특정 사용자의 번역정보 가져오기
     conn = pymysql.connect(host='34.64.173.250', user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
     sql_tr_info="SELECT u.email, t.source, t.target, t.len, t.datetime FROM  translationsource t JOIN user_info u ON u.uid=t.uid WHERE u.email=%s AND u.type != 'admin';"

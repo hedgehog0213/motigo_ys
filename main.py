@@ -34,7 +34,7 @@ def main():
 
 
 @app.route("/trans", methods=['GET', 'POST'],)
-def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paidamount=paidamount):
+def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid):
     sourcetxt = request.args.get("sourcetxt")
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':
@@ -42,13 +42,11 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paid
         else:
             targettxt = gap.translate_to_ko_text(sourcetxt)
         whole_result = save_srctgt(sourcetxt, targettxt)
-        result = whole_result[1:3]
-        tgtresult = whole_result[2]
+        result = whole_result[1:3] #번역에 관한 모든 정보
+        tgtresult = whole_result[2] #딱 번역된 결과만
         source_len=len(sourcetxt.replace(' ', ''))
         print("/trans까지 완료" + session['uid']) #session['uid']가 존재하는 것 확인
-    #uid=session['uid']
-    #print("trans에서의 세션값 입니다"+uid)
-    return render_template("translator.html",result=result,source_len=source_len,uid=uid)
+    return render_template("translator.html",result=tgtresult,source_len=source_len,uid=uid)#딱 번역된 결과만
 
 @app.route("/move_admin")
 def move_admin():
@@ -64,7 +62,6 @@ def move_admin():
 #저장
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
 def save_srctgt(sourcetxt, targettxt,uid=uid):
-    #database.save(sourcetxt, targettxt)
     #session['uid']
     gcp_mysql_insert.save_pymysql(sourcetxt, targettxt, session['uid']) #session['uid']만 들어가 있어도 세션값이 넘어감
     uid=session['uid']
@@ -90,17 +87,12 @@ def saveSQL():
     return redirect(url_for('trans'))
 
 
-@app.route('/kg') # 충전 관련 ++ 여기다가 충전 관련 함수 만든후 사용하면 될듯
+@app.route('/kg') # 충전페이지
 def kg_pay():
-    save_point = request.args.get('money')
-    #uid = session['uid']
-    #save_point_db(save_point,session['uid'])
-    #print(save_point)
-    print("결제창에서의"+session['uid'])#로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
-    #print(uid)
+    print("결제창에서의" + session['uid'])  # 로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
     return render_template('selectbox.html')
 
-@app.route("/paidamount",methods=["GET","POST"])
+@app.route("/paidamount",methods=["GET","POST"]) #결제금액을 충전하기 위한 부분
 def save_paidamount():
     paidamount = request.args.get("paidamount")
     uid=session['uid']
@@ -110,7 +102,7 @@ def save_paidamount():
     return redirect(url_for('trans'))
 
 
-@app.route('/dash_board')
+@app.route('/dash_board') #시각화 대시보드
 def dash_board():
     now_type = gcp_mysql_insert.check_admin(session['uid'])
     # print(now_type)
@@ -120,7 +112,7 @@ def dash_board():
         return render_template('graph.html')
 
 
-@app.route('/user_list')
+@app.route('/user_list') # 회원 정보
 def user_list():
     now_type=gcp_mysql_insert.check_admin(session['uid'])
     #print(now_type)
@@ -131,7 +123,7 @@ def user_list():
     else:
         return redirect(url_for('trans'))
 
-@app.route('/charge_list')
+@app.route('/charge_list') #충전 정보
 def charge_point():
     now_type = gcp_mysql_insert.check_admin(session['uid'])
     if now_type == "admin":
@@ -142,7 +134,7 @@ def charge_point():
 
 
 
-@app.route('/tr_select')
+@app.route('/tr_select') #email아이디 리스트 만들기
 def tr_select():
     now_type = gcp_mysql_insert.check_admin(session['uid'])
     if now_type == "admin":
@@ -155,7 +147,7 @@ def tr_select():
 
 
 
-@app.route('/tr_list',methods=['POST'])
+@app.route('/tr_list',methods=['POST']) #이메일 리스트에서 선택된 이메일관련 내역을 표로 출력
 def tr_info():
     now_type = gcp_mysql_insert.check_admin(session['uid'])
     if now_type == "admin":
@@ -171,7 +163,7 @@ def tr_info():
 
 
 
-@app.route('/administrator')
+@app.route('/administrator')#관리자 페이지
 def administrator():
     now_type = gcp_mysql_insert.check_admin(session['uid'])
     if now_type == "admin":

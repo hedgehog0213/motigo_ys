@@ -36,6 +36,7 @@ def main():
 @app.route("/trans", methods=['GET', 'POST'],)
 def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paidamount=paidamount):
     sourcetxt = request.args.get("sourcetxt")
+    session['uid']
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':
             targettxt = gap.translate_to_en_text(sourcetxt)
@@ -55,10 +56,9 @@ def move_admin():
     now_type = gcp_mysql_insert.check_admin(session['uid'])
     # print(now_type)
     if now_type != "admin":
-        flash("관리자가 아닙니다")
         return redirect(url_for('trans'))
     else:
-        return redirect(url_for('tr_select'))
+        return redirect(url_for('administrator'))
 
 
 
@@ -111,8 +111,8 @@ def save_paidamount():
     return redirect(url_for('trans'))
 
 
-@app.route('/graph_day')
-def show_graph_day():
+@app.route('/dash_board')
+def dash_board():
     return render_template('graph.html')
 
 @app.route('/user_list')
@@ -149,6 +149,18 @@ def tr_info():
     return render_template('translation_list.html',tables=[translatinsource_list_DataFrame.to_html(classes='data')],titles=translatinsource_list_DataFrame.columns.values)
     #print(target_email)
     #return print(target_email)
+
+
+@app.route('/administrator')
+def administrator():
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    if now_type == "admin":
+        return render_template('administrator.html')
+    else:
+        return render_template("return.html")
+
+
+
 
 if __name__ == '__main__':
     app.run()

@@ -39,11 +39,6 @@
           onAuthStateChanged(auth, (user) => {
           if (user) {
             console.log(user)
-
-            const uid = user.uid;
-            console.log(uid);
-            document.getElementById('uid').value = uid;
-            console.log(uid, '= 전송 성공');
           } else {
             alert('로그인 해주세요')
             location.replace('/');

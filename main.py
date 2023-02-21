@@ -26,11 +26,7 @@ uid=''
 
 @app.route('/')
 def popauth():
-    return render_template('popauth.html')
-
-@app.route('/google_demo')
-def main():
-    return render_template('google_demo.html')
+    return render_template('google_login.html')
 
 
 @app.route("/trans", methods=['GET', 'POST'],)
@@ -75,12 +71,13 @@ def save_srctgt(sourcetxt, targettxt,uid=uid):
 
 @app.route("/saveSQL", methods=['POST']) #회원정보 저장
 def saveSQL():
-    output = request.get_json()
-    result = json.loads(output)
-    pdinfo = pd.DataFrame(result['info'])
-    uid = pdinfo.iloc[0,0]
-    name = pdinfo.iloc[1,0]
-    email = pdinfo.iloc[2,0]
+    print('접속성공')
+    userinfo = request.get_json()
+    print(type(userinfo))
+
+    uid = userinfo['uid']
+    name = userinfo['uname']
+    email = userinfo['email']
     gcp_mysql_insert.save_user_pymysql(uid,name,email)
     session['uid']=uid #uid까진 적용이 되었다
     print('saveSQL까지 완료 with'+session['uid'])

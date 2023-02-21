@@ -36,7 +36,6 @@ def main():
 @app.route("/trans", methods=['GET', 'POST'],)
 def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,paidamount=paidamount):
     sourcetxt = request.args.get("sourcetxt")
-    session['uid']
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':
             targettxt = gap.translate_to_en_text(sourcetxt)
@@ -99,7 +98,7 @@ def kg_pay():
     #print(save_point)
     print("결제창에서의"+session['uid'])#로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
     #print(uid)
-    return render_template('kg.html')
+    return render_template('selectbox.html')
 
 @app.route("/paidamount",methods=["GET","POST"])
 def save_paidamount():

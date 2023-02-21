@@ -60,5 +60,5 @@ def save_paidamount(uid,paidamount): #결제 정보 db에 저장 및 무료회�
         conn.close()
     else:
         print('이미 유료회원 입니다')
-    conn.close()
+        conn.close()
 

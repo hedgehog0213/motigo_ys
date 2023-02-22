@@ -51,7 +51,7 @@ def move_admin():
     if now_type != "admin":
         return redirect(url_for('trans'))
     else:
-        return redirect(url_for('administrator'))
+        return redirect(url_for('dash_board'))
 
 
 

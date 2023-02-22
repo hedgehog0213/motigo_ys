@@ -72,14 +72,6 @@
 			console.log(alertmsg);
 		});
 	}
-
-	function authsignout() {
-	firebase.auth().signOut().then(() => {
-                 // Sign-out successful.
-        }).catch((error) => {
-                  // An error happened.
-        });
-    }
 </script>
 
 <button type="button" onclick="authpop()">구글 계정으로 로그인하기</button>

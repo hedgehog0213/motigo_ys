@@ -18,7 +18,6 @@ result = ""
 source_len=""
 save_point=''
 paidamount=""
-paidamount=""
 uid=''
 point=0
 
@@ -46,7 +45,7 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,poin
         tgtresult = whole_result[2] #딱 번역된 결과만
         source_len=len(sourcetxt.replace(' ', ''))
         point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
-    return render_template("translator.html",len=source_len,sourcetxt=sourcetxt, result=tgtresult,source_len=source_len,uid=uid, point=point)#딱 번역된 결과만
+    return render_template("translator.html",sourcetxt=sourcetxt, result=tgtresult,source_len=source_len,uid=uid, point=point)#딱 번역된 결과만
 
 @app.route("/move_admin")
 def move_admin():

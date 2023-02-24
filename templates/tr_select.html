@@ -5,6 +5,21 @@
     <title>Motigo</title>
 </head>
 <body>
+<style>
+    a {
+      text-decoration-line: none;
+      color: black;
+      border: 3px solid gray;
+    }
+    a.forth{
+        position: absloute;
+        top :0px;
+        left:0px;
+    }
+</style>
+
+<h2><a href="/dash_board" class="forth">돌아가기</a></h2>
+
 <h2>확인하고 싶은 회원을 선택해 주세요</h2>
 <form action="/tr_list" method="POST">
     <select id="email" name="selected_value">

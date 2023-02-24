@@ -31,6 +31,7 @@ def popauth():
 
 @app.route("/trans", methods=['GET', 'POST'],)
 def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid):
+    #print(session['uid'])
     sourcetxt = request.args.get("sourcetxt")
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':

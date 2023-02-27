@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   </head>
   <body>
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script type="module">
@@ -54,27 +55,6 @@
           }
       })
 </script>
-<script>
-      function countChars(obj){
-          var message = obj.value.replace(/\s+/g, '');
-          var len = message.length;
-            document.getElementById("charNum").innerHTML = len+' characters';
-
-          var point = document.getElementById('point').innerText;
-          //console.log(point);
-          //console.log(len);
-
-          var button_click = document.getElementById("trans");
-
-          if(point<len) {
-            button_click.disabled = true;
-            document.getElementById("notices").innerHTML = '포인트가 부족합니다';
-          } else {
-            button_click.disabled = false;
-            document.getElementById("notices").innerHTML = '';
-          }
-      }
-</script>
   <style>
     .move{
     position: absolute;
@@ -90,8 +70,8 @@
     <form action="/trans" method="get">
         <div class="row align-items-center">
           <div class="col">
-            <textarea placeholder="번역할 것을 적어주세요" rows=10 cols=30 name="sourcetxt" id="sourcetxt" onkeyup="countChars(this);"></textarea>
-            <p id="charNum">0 characters</p>
+            <textarea placeholder="번역할 것을 적어주세요" rows=10 cols=30 name="sourcetxt" id="sourcetxt"></textarea>
+            <p><span id="charNum">0</span> characters</p>
           </div>
           <div class="col">
             <button class="btn btn-warning" id="trans">번역</button>
@@ -119,11 +99,40 @@
     <script>
       // 번역 전 내용 함께 출력
       var txt = '{{sourcetxt}}';
-      console.log(typeof(txt));
+      var len = '{{len}}';
+      var point = document.getElementById('point').innerText;
+      var button_click = document.getElementById("trans");
 
       if(txt != "None") {
         console.log(txt);
         document.getElementById("sourcetxt").innerHTML = txt;
+      }
+
+      // 번역을 이미 한번 돌린 후라 내역이 남아있을 시
+      if(len != "") {
+        document.getElementById("charNum").innerHTML = len;
+
+        pCompare(len, point);
+      }
+
+      // 기존 번역 내역에서 추가하거나 새로이 입력할 때 글자 수 세기
+      $('#sourcetxt').keyup(function(){
+        var m = $(this).val().replace(/\s+/g, ''); //입력한 값 공백제거
+        var len = m.length;
+        document.getElementById("charNum").innerHTML = len;
+
+        pCompare(len, point);
+      });
+
+      //글자 수 - 포인트 대조 후 버튼 활성화
+      function pCompare(len, point){
+        if(point<len || point == 0) {
+          button_click.disabled = true;
+          document.getElementById("notices").innerHTML = '포인트가 부족합니다';
+        } else {
+          button_click.disabled = false;
+          document.getElementById("notices").innerHTML = '';
+        }
       }
     </script>
   </body>

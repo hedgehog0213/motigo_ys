@@ -57,7 +57,7 @@
               });
           } else {
             alert('로그인 후 이용 가능합니다')
-            location.replace('/');
+            //location.replace('/');
           }
       })
 </script>
@@ -102,6 +102,7 @@
 
       <button type="button" id="opener" class="btn btn btn-secondary">포인트충전</button>
       <button type="button" id="signoutButton" class="btn btn btn-secondary">로그아웃</button>
+      <button type="button" id="reload" class="btn btn btn-success" onclick="reload()"><img src="static/reload.png" style="height:33%; width:33%;"></button>
       <button  id="goAdmin" type="button" onclick="location.href='move_admin' " class="btn btn-outline-dark">관리자 페이지가기</button>
 
 
@@ -173,6 +174,10 @@
           button_click.disabled = false;
           document.getElementById("notices").innerHTML = '';
         }
+      }
+
+      function reload() {
+        location.replace('/trans');
       }
 
       // 다이얼로그 창 띄우기

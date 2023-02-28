@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Motigo_Join</title>
 </head>
 <body>
-<!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
-
-<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
-
-<!-- Add Firebase products that you want to use -->
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<div class="container text-center">
+  <div class="row" style="margin : 10px;">
+    <div class="col" style="text-align : center; margin-top: 10%;">
+      <h2>모티고 번역 서비스에 오신것을 환영합니다 !</h2>
+    </div>
+  </div>
+    <br>
+  <div class="row">
+    <div class="col" style="text-align : center; margin : 10px;">
+      <img src="static/motigo_logo.png" style="height:40%; width:40%;">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" style="text-align : center;">
+      <button type="button" onclick="authpop()" style="border:0; background-color:white;"><img src="static/gogole-signin.png" style="height:50%; width:50%; " alt="구글로그인"></button>
+    </div>
+  </div>
+</div>
+
 <script>
 	// TODO: Replace the following with your app's Firebase project configuration
 	// For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
@@ -29,7 +43,7 @@
 	// Initialize Firebase
 	firebase.initializeApp(firebaseConfig);
 
-        var provider = new firebase.auth.GoogleAuthProvider();
+    var provider = new firebase.auth.GoogleAuthProvider();
 
 	function authpop() {
 		firebase.auth().signInWithPopup(provider).then(function(result) {
@@ -58,7 +72,7 @@
             data: JSON.stringify(j),
             success:function(data){
               alert(username+"님 환영합니다");
-              window.location.href = "/trans";
+              location.replace('/trans');
           }
           });
 
@@ -72,20 +86,7 @@
 			console.log(alertmsg);
 		});
 	}
-
-	function authsignout() {
-	firebase.auth().signOut().then(() => {
-                 // Sign-out successful.
-        }).catch((error) => {
-                  // An error happened.
-        });
-    }
 </script>
-
-<button type="button" onclick="authpop()">구글 계정으로 로그인하기</button>
-<button type="button" onclick="authsignout()">sign out</button>
-
-
 </body>
 
 </html>

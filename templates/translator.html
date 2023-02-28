@@ -10,6 +10,9 @@
   </head>
   <body>
 <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>-->
+  <!-- iamport.payment.js -->
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js?version=1.0"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js?version=1.0" ></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -108,7 +111,7 @@
     <div id="dialog" title="결제금액을 입력해주세요" class="container text-center">
         <div class="row">
           <div class="col">
-              <select id="money" name="money" class="form-select" style="width: 120%;">
+              <select id="money" name="money" class="form-select" style="width: 130%;">
                 <option value="">가격 선택</option>
                 <option value="1000">1000원</option>
                 <option value="2000">2000원</option>
@@ -118,7 +121,7 @@
               </select>
           </div>
           <div class="col">
-            <button onclick="requestPay()" class="btn btn-outline-danger" id="goPay">결제하기</button>
+            <button onclick="requestPay()" class="btn btn-outline-danger" id="goPay" style="float: right">결제하기</button>
           </div>
       </div>
     </div>
@@ -161,6 +164,7 @@
       //글자 수 - 포인트 대조 후 버튼 활성화
       function pCompare(len, point){
         if(point<len || point <= 0) {
+          console.log(len,",",point);
           button_click.disabled = true;
           document.getElementById("notices").innerHTML = '포인트가 부족합니다';
         } else {
@@ -169,6 +173,7 @@
         }
       }
 
+      // 다이얼로그 창 띄우기
       $( function() {
         $( "#dialog" ).dialog({
           autoOpen: false
@@ -178,6 +183,45 @@
           $( "#dialog" ).dialog( "open" );
         });
       } );
+
+      // 이니시스 결제처리
+      var IMP = window.IMP;
+        IMP.init("imp67011510");
+
+        var today = new Date();
+        var hours = today.getHours(); // 시
+        var minutes = today.getMinutes();  // 분
+        var seconds = today.getSeconds();  // 초
+        var milliseconds = today.getMilliseconds();
+        var makeMerchantUid = hours +  minutes + seconds + milliseconds;
+        //
+
+        function requestPay() {
+             var amount_money = document.getElementById("money").value;
+            IMP.request_pay({
+                pg : 'html5_inicis',
+                pay_method : 'card',
+                merchant_uid: "IMP"+makeMerchantUid,
+                name : '번역 포인트',
+                amount : amount_money,
+                buyer_email : 'rladudtj52@naver.com',
+                buyer_name : '모코코 기술연구소',
+                buyer_tel : '010-2689-3756',
+                buyer_addr : '서울 마포구 상암산로 76',
+                buyer_postcode : '123-456'
+            }, function (rsp) { // callback
+              if (rsp.success) {
+                    console.log(rsp);
+                    var msg = '결제가 완료되었습니다.';
+                    alert(msg + rsp.paid_amount + '원');
+                    location.href = 'paidamount?paidamount='+rsp.paid_amount;
+                } else {
+                    var msg = '결제에 실패하였습니다.';
+                    msg += ' 에러내용 : ' + rsp.error_msg;
+                    alert(msg);
+                }
+            });
+        }
     </script>
   </body>
 </html>

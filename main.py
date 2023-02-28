@@ -86,10 +86,10 @@ def saveSQL():
     return redirect(url_for('trans'))
 
 
-@app.route('/kg') # 충전페이지
-def kg_pay():
-    print("결제창에서의" + session['uid'])  # 로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
-    return render_template('selectbox.html')
+# @app.route('/kg') # 충전페이지
+# def kg_pay():
+#     print("결제창에서의" + session['uid'])  # 로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
+#     return render_template('selectbox.html')
 
 @app.route("/paidamount",methods=["GET","POST"]) #결제금액을 충전하기 위한 부분
 def save_paidamount():

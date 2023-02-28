@@ -126,12 +126,12 @@
           <div class="col">
             <button onclick="requestPay()" class="btn btn-outline-danger" id="goPay" style="float: right">결제하기</button>
           </div>
-      </div>
-    </div>
-    <script>
+            <script>
       var txt = '{{sourcetxt}}';
       var len = '{{len}}';
+      len = Number(len);
       var point = document.getElementById('point').innerText;
+      point = Number(point);
       var button_click = document.getElementById("trans");
 
       // point가 0 이하일 경우 음의 정수가 아닌 0으로 표시
@@ -166,8 +166,9 @@
 
       //글자 수 - 포인트 대조 후 버튼 활성화
       function pCompare(len, point){
-        if(point<len || point <= 0) {
-          console.log(len,",",point);
+          //console.log(typeof(len),",",typeof(point));
+        if(point<len || point == 0) {
+          //console.log(len,",",point);
           button_click.disabled = true;
           document.getElementById("notices").innerHTML = '포인트가 부족합니다';
         } else {
@@ -230,5 +231,7 @@
             });
         }
     </script>
+        </div>
+    </div>
   </body>
 </html>

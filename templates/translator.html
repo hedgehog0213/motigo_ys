@@ -167,7 +167,7 @@
       //글자 수 - 포인트 대조 후 버튼 활성화
       function pCompare(len, point){
           //console.log(typeof(len),",",typeof(point));
-        if(point<len || point == 0) {
+        if(point < len || point === 0) {
           //console.log(len,",",point);
           button_click.disabled = true;
           document.getElementById("notices").innerHTML = '포인트가 부족합니다';

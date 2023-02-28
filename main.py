@@ -19,7 +19,7 @@ source_len=""
 save_point=''
 paidamount=""
 uid=''
-
+point=0
 
 #메인화면
 
@@ -30,20 +30,22 @@ def popauth():
 
 
 @app.route("/trans", methods=['GET', 'POST'],)
-def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid):
-    #print(session['uid'])
+def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,point=point):
+    print(session['uid'])
+    point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
     sourcetxt = request.args.get("sourcetxt")
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':
             targettxt = gap.translate_to_en_text(sourcetxt)
         else:
             targettxt = gap.translate_to_ko_text(sourcetxt)
+        print("/trans까지 완료" + session['uid']) #session['uid']가 존재하는 것 확인
         whole_result = save_srctgt(sourcetxt, targettxt)
         result = whole_result[1:3] #번역에 관한 모든 정보
         tgtresult = whole_result[2] #딱 번역된 결과만
         source_len=len(sourcetxt.replace(' ', ''))
-        print("/trans까지 완료" + session['uid']) #session['uid']가 존재하는 것 확인
-    return render_template("translator.html",result=tgtresult,source_len=source_len,uid=uid)#딱 번역된 결과만
+        point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
+    return render_template("translator.html",len=source_len,sourcetxt=sourcetxt, result=tgtresult,source_len=source_len,uid=uid, point=point)#딱 번역된 결과만
 
 @app.route("/move_admin")
 def move_admin():
@@ -59,13 +61,13 @@ def move_admin():
 #저장
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
 def save_srctgt(sourcetxt, targettxt,uid=uid):
-    #session['uid']
+    session['uid']
     gcp_mysql_insert.save_pymysql(sourcetxt, targettxt, session['uid']) #session['uid']만 들어가 있어도 세션값이 넘어감
     uid=session['uid']
+    print("/save까지 완료 with" + session['uid'])
     result = gcp_mysql_insert.load_result_pymysql()
     in_up.consumption(session['uid'], len(sourcetxt.replace(' ','')))
     #print("/save에서의 result : ",result)
-    print("/save까지 완료 with" + session['uid'])
     #return redirect(url_for("trans"))
     return result
 
@@ -84,10 +86,10 @@ def saveSQL():
     return redirect(url_for('trans'))
 
 
-@app.route('/kg') # 충전페이지
-def kg_pay():
-    print("결제창에서의" + session['uid'])  # 로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
-    return render_template('selectbox.html')
+# @app.route('/kg') # 충전페이지
+# def kg_pay():
+#     print("결제창에서의" + session['uid'])  # 로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
+#     return render_template('selectbox.html')
 
 @app.route("/paidamount",methods=["GET","POST"]) #결제금액을 충전하기 위한 부분
 def save_paidamount():

@@ -100,7 +100,7 @@
         </div>
       </form>
 
-      <button type="button" id="opener" class="btn btn btn-secondary">결제하러가기</button>
+      <button type="button" id="opener" class="btn btn btn-secondary">포인트충전</button>
       <button type="button" id="signoutButton" class="btn btn btn-secondary">로그아웃</button>
       <button  id="goAdmin" type="button" onclick="location.href='move_admin' " class="btn btn-outline-dark">관리자 페이지가기</button>
 
@@ -110,10 +110,12 @@
     <!-- dialog -->
     <div id="dialog" title="결제금액을 입력해주세요">
         <div class="row">
+          <p style="color: #51585e; font-size: 10px;">※ 1원당 1포인트 적립</p>
           <div class="col">
               <select id="money" name="money" class="form-select" style="width: 130%;">
                 <option value="">가격 선택</option>
                 <option value="1000">1000원</option>
+                <option value="2000">2000원</option>
                 <option value="2000">2000원</option>
                 <option value="3000">3000원</option>
                 <option value="5000">5000원</option>

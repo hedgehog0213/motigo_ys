@@ -67,7 +67,7 @@
     background: white;
   }
 
-  #goAdmin {
+  #goPage {
     border: hidden;
     position: absolute;
     right: 0.5rem;
@@ -101,7 +101,7 @@
       <button type="button" id="opener" class="btn btn btn-secondary">포인트충전</button>
       <button type="button" id="signoutButton" class="btn btn btn-secondary">로그아웃</button>
       <button type="button" id="reload" class="btn btn btn-success" onclick="reload()"><img src="static/reload.png" style="height:33%; width:33%;"></button>
-      <button  id="goAdmin" type="button" onclick="location.href='move_admin' " class="btn btn-outline-dark">관리자 페이지가기</button>
+      <button  id="goPage" type="button" class="btn btn-outline-dark" onclick="gopage()">MyPage</button>
     </div>
 
     <!-- dialog -->
@@ -131,6 +131,25 @@
   var point = document.getElementById('point').innerText;
   point = Number(point);
   var button_click = document.getElementById("trans");
+  var usrType = '{{usrType}}';
+  console.log(usrType);
+
+  // usrType에 따라 관리자페이지 || 마이페이지 이동 처리
+  if(usrType == 'admin') //usrtype이 어드민이면 버튼 텍스트 변경
+  {
+    document.getElementById("goPage").innerHTML = 'AdminPage';
+  }
+
+  function gopage() {
+      console.log('버튼 클릭')
+      if(usrType == 'admin') //usrtype이 어드민이면 버튼 텍스트 변경
+      {
+        console.log('대시보드로 이동합니다')
+        location.replace('/dash_board');
+      } else {
+        location.replace('/mypage');
+      }
+  }
 
   // point가 0 이하일 경우 음의 정수가 아닌 0으로 표시
   if(point <= 0) {
@@ -175,6 +194,7 @@
     }
   }
 
+  //새로고침버튼 클릭 시 새로고침
   function reload() {
     location.replace('/trans');
   }

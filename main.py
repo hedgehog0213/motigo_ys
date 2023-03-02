@@ -33,6 +33,8 @@ def popauth():
 def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,point=point):
     print(session['uid'])
     point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
+    usrType = move_page()
+    print(usrType)
     sourcetxt = request.args.get("sourcetxt")
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':
@@ -45,18 +47,25 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,poin
         tgtresult = whole_result[2] #딱 번역된 결과만
         source_len=len(sourcetxt.replace(' ', ''))
         point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
-    return render_template("translator.html",len=source_len,sourcetxt=sourcetxt, result=tgtresult,source_len=source_len,uid=uid, point=point)#딱 번역된 결과만
+    return render_template("translator.html",usrType=usrType ,len=source_len,sourcetxt=sourcetxt, result=tgtresult,source_len=source_len,uid=uid, point=point)#딱 번역된 결과만
 
-@app.route("/move_admin")
-def move_admin():
+# @app.route("/move_admin")
+# def move_admin():
+#     now_type = gcp_mysql_insert.check_admin(session['uid'])
+#     # print(now_type)
+#     if now_type != "admin":
+#         return redirect(url_for('trans'))
+#     else:
+#         return redirect(url_for('dash_board'))
+
+@app.route("/move_page")
+def move_page():
     now_type = gcp_mysql_insert.check_admin(session['uid'])
     # print(now_type)
     if now_type != "admin":
-        return redirect(url_for('trans'))
+        return 'user'
     else:
-        return redirect(url_for('dash_board'))
-
-
+        return 'admin'
 
 #저장
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
@@ -93,6 +102,9 @@ def save_paidamount():
     in_up.save_paidamount(uid,int(paidamount))
     return redirect(url_for('trans'))
 
+@app.route('/mypage')
+def my_main():
+    return render_template('mypage.html')
 
 @app.route('/dash_board') #시각화 대시보드
 def dash_board():

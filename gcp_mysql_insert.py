@@ -69,12 +69,13 @@ def save_user_pymysql(uid,name,email): #유저 정보를 입력받아 보자,현
 def load_user_list(): #유저 정보 가져오기
     conn = pymysql.connect(host='34.64.173.250',user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
-    sql1="SELECT email,NAME,TYPE,SUBSTR(DATETIME,1,10) AS '가입일자' FROM user_info order by 3 desc,4,1;"
+    sql1="SELECT uid,email,NAME,TYPE,SUBSTR(DATETIME,1,10) AS '가입일자' FROM user_info order BY FIELD(type,'admin','유료회원','무료회원'),4,1;"
     cur.execute(sql1)
     bd=cur.fetchall()
     conn.commit()
     conn.close()
-    user_DataFrame=pd.DataFrame(bd,columns=['email','name','type','sign_up_date'])
+    user_DataFrame=pd.DataFrame(bd,columns=['UID','Email','Name','Type','JoinDate'])
+    user_DataFrame.index = user_DataFrame.index + 1
     user_html=user_DataFrame.to_html()
     #print(user_DataFrame)
     return user_DataFrame
@@ -103,7 +104,8 @@ def load_user_translationsource(uid): #특정 유저의 번역 정보 가져오�
     tr_bd=cur.fetchall()
     conn.commit()
     conn.close()
-    translation_DataFrame=pd.DataFrame(tr_bd,columns=['name','datetime','source','target','point'])
+    translation_DataFrame=pd.DataFrame(tr_bd,columns=['Name','Datetime','Source','Target','Point'])
+    translation_DataFrame.index = translation_DataFrame.index + 1
     #print(translation_DataFrame)
     return translation_DataFrame
 
@@ -115,7 +117,8 @@ def load_charge_point(): #특정 유저의 결제(충전) 정보 가져오기
     cp_bd=cur.fetchall()
     conn.commit()
     conn.close()
-    charge_point_DataFrame=pd.DataFrame(cp_bd,columns=['name','email','point','datetime'])
+    charge_point_DataFrame=pd.DataFrame(cp_bd,columns=['Name','Email','Point','Datetime'])
+    charge_point_DataFrame.index = charge_point_DataFrame.index + 1
     #print(charge_point_DataFrame)
     return charge_point_DataFrame
 
@@ -142,7 +145,8 @@ def load_tr_list(target_email): #관리자가 아닌 특정 사용자의 번역�
     tl_bd=cur.fetchall()
     conn.commit()
     conn.close()
-    translatinsource_list_DataFrame = pd.DataFrame(tl_bd, columns=['email', 'source', 'target', 'point','datetime'])
+    translatinsource_list_DataFrame = pd.DataFrame(tl_bd, columns=['Email', 'Source', 'Target', 'Point','Datetime'])
+    translatinsource_list_DataFrame.index = translatinsource_list_DataFrame.index + 1
     #print(translatinsource_list_DataFrame)
     return translatinsource_list_DataFrame
 

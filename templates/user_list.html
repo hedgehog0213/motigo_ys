@@ -3,56 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <title>Motigo</title>
-    <style>
-      .data {
-        border-collapse: collapse;
-        border: 2px solid black;
-        margin: 25px 0;
-        font-size: 0.9em;
-        font-family: sans-serif;
-        min-width: 400px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-        text-align: center;
-      }
-
-      .data thead tr {
-        background-color: #009879;
-        color: #ffffff;
-        text-align: center;
-      }
-
-      .data th,
-      .data td {
-        padding: 12px 15px;
-        text-align: center;
-      }
-
-      .data tbody tr {
-        border-bottom: 1px solid #dddddd;
-        text-align: center;
-      }
-
-      .data tbody tr:nth-of-type(even) {
-        background-color: #f3f3f3;
-        text-align: center;
-      }
-    </style>
+    <link rel="stylesheet" href="static/css/dataframe.css"/>
   </head>
   <body>
-<style>
-    a {
-      text-decoration-line: none;
-      color: black;
-      border: 3px solid gray;
-    }
-    a.forth{
-        position: absloute;
-        top :0px;
-        left:0px;
-    }
-</style>
-
-<h2><a href="/dash_board" class="forth">돌아가기</a></h2>
+    <header>{% include 'nav.html' %}</header>
     <h1>회원정보</h1>
     {{ tables[0]|safe }}
   </body>

@@ -31,6 +31,7 @@ def popauth():
 def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,point=point):
     print(session['uid'])
     point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
+    print("trans 포인트:", point)
     usrType = move_page()
     print(usrType)
     sourcetxt = request.args.get("sourcetxt")
@@ -60,7 +61,30 @@ def move_page():
 #마이페이지
 @app.route('/mypage')
 def my_main():
-    return render_template('mypage.html')
+    target_uid = session['uid']
+    myinfo = gcp_mysql_insert.my_page(target_uid)
+    email = myinfo[0]
+    uname = myinfo[1]
+    type = myinfo[2]
+    point = myinfo[3]
+    joindate = myinfo[4]
+    print(result)
+    return render_template('mypage.html',email=email,uname=uname,type=type,point=point,joindate=joindate)
+
+@app.route('/my_charge') #충전 정보
+def my_charge():
+    target_uid = session['uid']
+    charge_list = gcp_mysql_insert.my_charge_point(target_uid)
+    return render_template('myCharge.html', tables=[charge_list.to_html(classes='data')],titles=charge_list.columns.values)
+
+@app.route('/my_tr') # 나의 번역정보
+def my_tr():
+    target_uid = session['uid']
+    print(target_uid)
+    translatinsource_list_DataFrame = gcp_mysql_insert.my_tr_list(target_uid)
+    return render_template('myTrlist.html',
+                               tables=[translatinsource_list_DataFrame.to_html(classes='data')],
+                               titles=translatinsource_list_DataFrame.columns.values)
 
 #관리자페이지
 @app.route('/dash_board') #시각화 대시보드

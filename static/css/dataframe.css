@@ -34,3 +34,8 @@
     padding: 2rem;
     font-weight: bold;
   }
+
+  button {
+   background-color: blue;
+   color: white;
+  }

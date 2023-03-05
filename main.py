@@ -32,9 +32,9 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,poin
     print(session['uid'])
     point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
     print("trans 포인트:", point)
+    sourcetxt = request.args.get("sourcetxt")
     usrType = move_page()
     print(usrType)
-    sourcetxt = request.args.get("sourcetxt")
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':
             targettxt = gap.translate_to_en_text(sourcetxt)
@@ -46,7 +46,7 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,poin
         tgtresult = whole_result[2] #딱 번역된 결과만
         source_len=len(sourcetxt.replace(' ', ''))
         point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
-    return render_template("translator.html",usrType=usrType ,len=source_len,sourcetxt=sourcetxt, result=tgtresult,source_len=source_len,uid=uid, point=point)#딱 번역된 결과만
+    return render_template("translator.html", usrType=usrType, len=source_len,sourcetxt=sourcetxt, result=tgtresult,source_len=source_len,uid=uid, point=point)#딱 번역된 결과만
 
 # 유저타입 식별(어드민 || 유저)
 @app.route("/move_page")
@@ -69,20 +69,26 @@ def my_main():
     point = myinfo[3]
     joindate = myinfo[4]
     print(result)
-    return render_template('mypage.html',email=email,uname=uname,type=type,point=point,joindate=joindate)
+    usrType = move_page()
+    print(usrType)
+    return render_template('mypage.html', usrType=usrType, email=email,uname=uname,type=type,point=point,joindate=joindate)
 
 @app.route('/my_charge') #충전 정보
 def my_charge():
     target_uid = session['uid']
     charge_list = gcp_mysql_insert.my_charge_point(target_uid)
-    return render_template('myCharge.html', tables=[charge_list.to_html(classes='data')],titles=charge_list.columns.values)
+    usrType = move_page()
+    print(usrType)
+    return render_template('myCharge.html', usrType=usrType, tables=[charge_list.to_html(classes='data')],titles=charge_list.columns.values)
 
 @app.route('/my_tr') # 나의 번역정보
 def my_tr():
     target_uid = session['uid']
     print(target_uid)
     translatinsource_list_DataFrame = gcp_mysql_insert.my_tr_list(target_uid)
-    return render_template('myTrlist.html',
+    usrType = move_page()
+    print(usrType)
+    return render_template('myTrlist.html', usrType=usrType,
                                tables=[translatinsource_list_DataFrame.to_html(classes='data')],
                                titles=translatinsource_list_DataFrame.columns.values)
 

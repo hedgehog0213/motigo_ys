@@ -39,3 +39,7 @@
    background-color: blue;
    color: white;
   }
+
+  .data tbody {
+    background-color: white;
+  }

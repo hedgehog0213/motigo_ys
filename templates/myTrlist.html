@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <title>Motigo</title>
+    <link rel="stylesheet" href="static/css/dataframe.css"/>
+  </head>
+  <body style="background-color: #f9f9f9;">
+    <header>{% include 'nav.html' %}</header>
+    <h1>번역내역</h1>
+    {{ tables[0]|safe }}
+  </body>
+</html>

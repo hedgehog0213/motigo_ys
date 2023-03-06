@@ -21,19 +21,20 @@ paidamount=""
 uid=''
 point=0
 
-#메인화면
-
-
+# 메인화면(로그인)
 @app.route('/')
 def popauth():
     return render_template('popauth.html')
 
-
+#번역창
 @app.route("/trans", methods=['GET', 'POST'],)
 def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,point=point):
     print(session['uid'])
     point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
+    print("trans 포인트:", point)
     sourcetxt = request.args.get("sourcetxt")
+    usrType = move_page()
+    print(usrType)
     if sourcetxt is not None:
         if gap.tr.translate(sourcetxt).src == 'ko':
             targettxt = gap.translate_to_en_text(sourcetxt)
@@ -45,18 +46,104 @@ def trans(tgtresult=tgtresult, result=result, source_len=source_len,uid=uid,poin
         tgtresult = whole_result[2] #딱 번역된 결과만
         source_len=len(sourcetxt.replace(' ', ''))
         point = in_up.select_point(session['uid']) # 사용 전 포인트 조회
-    return render_template("translator.html",len=source_len,sourcetxt=sourcetxt, result=tgtresult,source_len=source_len,uid=uid, point=point)#딱 번역된 결과만
+    return render_template("translator.html", usrType=usrType, len=source_len,sourcetxt=sourcetxt, result=tgtresult,source_len=source_len,uid=uid, point=point)#딱 번역된 결과만
 
-@app.route("/move_admin")
-def move_admin():
+# 유저타입 식별(어드민 || 유저)
+@app.route("/move_page")
+def move_page():
     now_type = gcp_mysql_insert.check_admin(session['uid'])
     # print(now_type)
     if now_type != "admin":
+        return 'user'
+    else:
+        return 'admin'
+
+#마이페이지
+@app.route('/mypage')
+def my_main():
+    target_uid = session['uid']
+    myinfo = gcp_mysql_insert.my_page(target_uid)
+    email = myinfo[0]
+    uname = myinfo[1]
+    type = myinfo[2]
+    point = myinfo[3]
+    joindate = myinfo[4]
+    print(result)
+    usrType = move_page()
+    print(usrType)
+    return render_template('mypage.html', usrType=usrType, email=email,uname=uname,type=type,point=point,joindate=joindate)
+
+@app.route('/my_charge') #충전 정보
+def my_charge():
+    target_uid = session['uid']
+    charge_list = gcp_mysql_insert.my_charge_point(target_uid)
+    usrType = move_page()
+    print(usrType)
+    return render_template('myCharge.html', usrType=usrType, tables=[charge_list.to_html(classes='data')],titles=charge_list.columns.values)
+
+@app.route('/my_tr') # 나의 번역정보
+def my_tr():
+    target_uid = session['uid']
+    print(target_uid)
+    translatinsource_list_DataFrame = gcp_mysql_insert.my_tr_list(target_uid)
+    usrType = move_page()
+    print(usrType)
+    return render_template('myTrlist.html', usrType=usrType,
+                               tables=[translatinsource_list_DataFrame.to_html(classes='data')],
+                               titles=translatinsource_list_DataFrame.columns.values)
+
+#관리자페이지
+@app.route('/dash_board') #시각화 대시보드
+def dash_board():
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    # print(now_type)
+    if now_type != "admin":
+        distinct_email = tr_select()
         return redirect(url_for('trans'))
     else:
-        return redirect(url_for('dash_board'))
+        return render_template('graph.html')
 
 
+@app.route('/user_list') # 회원 정보
+def user_list():
+    now_type=gcp_mysql_insert.check_admin(session['uid'])
+    #print(now_type)
+    if now_type == "admin":
+        user_list = gcp_mysql_insert.load_user_list()
+        return render_template('user_list.html', tables=[user_list.to_html(classes='data')],
+                               titles=user_list.columns.values)
+    else:
+        return redirect(url_for('trans'))
+
+@app.route('/charge_list') #충전 정보
+def charge_point():
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    if now_type == "admin":
+        charge_list = gcp_mysql_insert.load_charge_point()
+        return render_template('charge_list.html', tables=[charge_list.to_html(classes='data')],titles=charge_list.columns.values)
+    else:
+        return redirect(url_for('trans'))
+
+@app.route('/tr_select') #email아이디 리스트 만들기
+def tr_select():
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    if now_type == "admin":
+        distinct_email = gcp_mysql_insert.load_distinct_email()
+        return render_template('tr_select2.html', distinct_email=distinct_email)
+    else:
+        return redirect(url_for('trans'))
+
+@app.route('/tr_list',methods=['POST']) #이메일 리스트에서 선택된 이메일관련 내역을 표로 출력
+def tr_info():
+    now_type = gcp_mysql_insert.check_admin(session['uid'])
+    if now_type == "admin":
+        target_email = request.form['selected_value']
+        translatinsource_list_DataFrame = gcp_mysql_insert.load_tr_list(target_email)
+        return render_template('translation_list.html',
+                               tables=[translatinsource_list_DataFrame.to_html(classes='data')],
+                               titles=translatinsource_list_DataFrame.columns.values)
+    else:
+        return redirect(url_for('trans'))
 
 #저장
 @app.route("/save", methods=["POST"]) #번역 결과 전과 후 저장 ++여기다가 소비 함수 만든 후 사용하면 될듯
@@ -85,12 +172,7 @@ def saveSQL():
     print('saveSQL까지 완료 with'+session['uid'])
     return redirect(url_for('trans'))
 
-
-# @app.route('/kg') # 충전페이지
-# def kg_pay():
-#     print("결제창에서의" + session['uid'])  # 로그인하고 넘어오면 나옴, 로그인 안하고 넘어오면 안됨
-#     return render_template('selectbox.html')
-
+#결제관련
 @app.route("/paidamount",methods=["GET","POST"]) #결제금액을 충전하기 위한 부분
 def save_paidamount():
     paidamount = request.args.get("paidamount")
@@ -99,78 +181,6 @@ def save_paidamount():
     print("paidamout에서의 "+session['uid'])
     in_up.save_paidamount(uid,int(paidamount))
     return redirect(url_for('trans'))
-
-
-@app.route('/dash_board') #시각화 대시보드
-def dash_board():
-    now_type = gcp_mysql_insert.check_admin(session['uid'])
-    # print(now_type)
-    if now_type != "admin":
-        return redirect(url_for('trans'))
-    else:
-        return render_template('graph.html')
-
-
-@app.route('/user_list') # 회원 정보
-def user_list():
-    now_type=gcp_mysql_insert.check_admin(session['uid'])
-    #print(now_type)
-    if now_type == "admin":
-        user_list = gcp_mysql_insert.load_user_list()
-        return render_template('user_list.html', tables=[user_list.to_html(classes='data')],
-                               titles=user_list.columns.values)
-    else:
-        return redirect(url_for('trans'))
-
-@app.route('/charge_list') #충전 정보
-def charge_point():
-    now_type = gcp_mysql_insert.check_admin(session['uid'])
-    if now_type == "admin":
-        charge_list = gcp_mysql_insert.load_charge_point()
-        return render_template('charge_list.html', tables=[charge_list.to_html(classes='data')],titles=charge_list.columns.values)
-    else:
-        return redirect(url_for('trans'))
-
-
-
-@app.route('/tr_select') #email아이디 리스트 만들기
-def tr_select():
-    now_type = gcp_mysql_insert.check_admin(session['uid'])
-    if now_type == "admin":
-        distinct_email = gcp_mysql_insert.load_distinct_email()
-        return render_template('tr_select.html', distinct_email=distinct_email)
-    else:
-        return redirect(url_for('trans'))
-
-
-
-
-
-@app.route('/tr_list',methods=['POST']) #이메일 리스트에서 선택된 이메일관련 내역을 표로 출력
-def tr_info():
-    now_type = gcp_mysql_insert.check_admin(session['uid'])
-    if now_type == "admin":
-        target_email = request.form['selected_value']
-        translatinsource_list_DataFrame = gcp_mysql_insert.load_tr_list(target_email)
-        return render_template('translation_list.html',
-                               tables=[translatinsource_list_DataFrame.to_html(classes='data')],
-                               titles=translatinsource_list_DataFrame.columns.values)
-    else:
-        return redirect(url_for('trans'))
-
-
-
-
-
-@app.route('/administrator')#관리자 페이지
-def administrator():
-    now_type = gcp_mysql_insert.check_admin(session['uid'])
-    if now_type == "admin":
-        return render_template('administrator.html')
-    else:
-        return redirect(url_for('trans'))
-
-
 
 
 if __name__ == '__main__':

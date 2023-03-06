@@ -1,0 +1,38 @@
+  textarea{
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border: hidden;
+    height:350px;
+    width: 600px;
+    border-radius: 8px;
+    padding: 30px 30px;
+    overflow-y: auto;
+    word-break:break-all;
+  }
+
+  textarea:focus {
+    resize: none;
+    outline: none;
+    border: 1.5px solid #319dd1;
+  }
+
+  #resetBtn {
+    border: hidden;
+    background-color: transparent;
+    width: 40px;
+  }
+
+  #trans {
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 0.3rem;
+    border: hidden;
+    background-color: #319dd1;
+    color: white;
+    cursor: pointer
+  }
+
+  #trans:hover {
+    background-color: #317fa5;
+  }

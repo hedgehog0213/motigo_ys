@@ -4,20 +4,17 @@
     <meta charset="UTF-8">
     <title>Motigo</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/static/css/translator.css"/>
   </head>
-  <body>
+  <body style="background-color: #f9f9f9;">
 <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>-->
   <!-- iamport.payment.js -->
-  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js?version=1.0"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js?version=1.0" ></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
   <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
@@ -45,185 +42,125 @@
       //로그인 여부 확인 코드
           onAuthStateChanged(auth, (user) => {
           if (user) {
-            console.log(user)
-            document.getElementById('signoutButton').addEventListener
-              ('click', () => {
-                signOut(auth).then(() => {
-                  // Sign-out successful.
-                }).catch((error) => {
-                  // An error happened.
-                });
-                alert('로그아웃 완료')
-              });
+            console.log(user);
+            const uname = user.displayName;
+            console.log(uname);
+            document.getElementById("uname").innerHTML = uname;
           } else {
             alert('로그인 후 이용 가능합니다')
             location.replace('/');
           }
       })
 </script>
-<style>
-  .ui-widget-header {
-    border: hidden;
-    background: white;
-  }
-
-  #goAdmin {
-    border: hidden;
-    position: absolute;
-    right: 0.5rem;
-    top: 0.5rem;
-  }
-</style>
-
-    <div class="container text-left">
-        <div class="col" style="text-align : center; margin : 10px;">
-          <img src="static/motigo_logo.png" style="height:20%; width:20%;">
-        </div>
+    <header>{% include "nav.html" %}</header>
+    <div class="container text-center" style="margin-top: 3rem;">
+      <h1 style="font-weight: bold; font-family: sans-serif;">MOTIGO TRANSLATOR</h1>
     </div>
-    <br>
-    <div class="container text-center">
-    <form action="/trans" method="get">
-        <div class="row align-items-center">
-          <div class="col">
-            <textarea placeholder="번역할 것을 적어주세요" rows=10 cols=30 name="sourcetxt" id="sourcetxt"></textarea>
-            <p><span id="charNum">0</span> characters</p>
+    <div class="container text-center" style="margin-top: 1.5rem;">
+      <form action="/trans" method="get" id="frm">
+        <div class="row">
+          <h5 style="margin-bottom: 3rem;"><span id="uname" style="font-weight:bold;">{{uname}}</span>님의 포인트: <span id="point" name="point"  style="color: #319dd1; font-weight:bold;">{{point}}</span>p</h5>
+          <div class="col" style="text-align: left;">
+            <textarea placeholder="번역할 것을 적어주세요" rows=10 cols=30 name="sourcetxt" id="sourcetxt" style="resize: none; font-size: 20px;"></textarea>
           </div>
-          <div class="col">
-            <button class="btn btn-warning" id="trans">번역</button>
+          <div class="col" style="text-align: right;">
+            <textarea rows=10 cols=30 name="resultbox" id="resultbox" style="resize: none; font-size: 20px;" readonly>{{result}}</textarea>
           </div>
-          <div class="col" style="border:1px black solid; height:300px;">
-              번역된 항목<br>
-              {{result}}
+          <p></p>
+          <div class="col" style="text-align: left;">
+            <span style="font-size: 20px;">현재 <span id="charNum" style="font-weight:bold;">0</span>글자 입력</span>
+            <button type=button id="resetBtn"><img src="/static/reload.png" style="height:100%; width:100%;" id="resetImg"></button>
           </div>
-          <p><span id="point" name="point">{{point}}</span> points</p>
-          <p id="notices" style="color: red"> </p>
+          <div>
+            <button class="btn transBtn" id="trans">번역</button>
+          </div>
+          <div>
+            <p id="notices" style="color: red"></p>
+          </div>
         </div>
       </form>
-
-      <button type="button" id="opener" class="btn btn btn-secondary">포인트충전</button>
-      <button type="button" id="signoutButton" class="btn btn btn-secondary">로그아웃</button>
-      <button  id="goAdmin" type="button" onclick="location.href='move_admin' " class="btn btn-outline-dark">관리자 페이지가기</button>
-
-
     </div>
+<script>
+  var txt = '{{sourcetxt}}';
+  var len = '{{len}}';
+  len = Number(len);
+  var point = document.getElementById('point').innerText;
+  point = Number(point);
+  var button_click = document.getElementById("trans");
+  console.log(len);
 
-    <!-- dialog -->
-    <div id="dialog" title="결제금액을 입력해주세요">
-        <div class="row">
-          <p style="color: #51585e; font-size: 10px;">※ 1원당 1포인트 적립</p>
-          <div class="col">
-              <select id="money" name="money" class="form-select" style="width: 130%;">
-                <option value="">가격 선택</option>
-                <option value="1000">1000원</option>
-                <option value="2000">2000원</option>
-                <option value="2000">2000원</option>
-                <option value="3000">3000원</option>
-                <option value="5000">5000원</option>
-                <option value="10000">10000원</option>
-              </select>
-          </div>
-          <div class="col">
-            <button onclick="requestPay()" class="btn btn-outline-danger" id="goPay" style="float: right">결제하기</button>
-          </div>
-      </div>
-    </div>
-    <script>
-      var txt = '{{sourcetxt}}';
-      var len = '{{len}}';
-      var point = document.getElementById('point').innerText;
-      var button_click = document.getElementById("trans");
+  //새로고침버튼 클릭 시 새로고침
+  document.getElementById("resetBtn").addEventListener('click', function () {
+    console.log('리셋 클릭');
+    location.replace('/trans');
+  });
 
-      // point가 0 이하일 경우 음의 정수가 아닌 0으로 표시
-      if(point <= 0) {
-        document.getElementById("point").innerHTML = 0;
-      }
+  //point가 0일 시
+  if(point == 0) {
+    alert('포인트가 부족합니다. 충전 후 이용바랍니다')
+  }
 
-      // 번역 전 내용 함께 출력
-      if(txt != "None") {
-        console.log(txt);
-        document.getElementById("sourcetxt").innerHTML = txt;
-      }
+  // point가 0 이하일 경우 음의 정수가 아닌 0으로 표시
+  if(point <= 0) {
+    document.getElementById("point").innerHTML = 0;
+  }
 
-      // 번역을 이미 한번 돌린 후라 내역이 남아있을 시의 글자수
-      if(len != "") {
-        document.getElementById("charNum").innerHTML = len;
+  // 번역 전 내용 함께 출력
+  if(txt != "None") {
+    console.log(txt);
+    document.getElementById("sourcetxt").innerHTML = txt;
+  }
 
-        pCompare(len, point);
-      }
-      else {
-        pCompare(len, point);
-      }
+  // 번역을 이미 한번 돌린 후라 내역이 남아있을 시의 글자수
+  if(len != "") {
+    document.getElementById("charNum").innerHTML = len;
 
-      // 기존 번역 내역에서 추가하거나 새로이 입력할 때 글자 수 세기
-      $('#sourcetxt').keyup(function(){
-        var m = $(this).val().replace(/\s+/g, ''); //입력한 값 공백제거
-        var len = m.length;
-        document.getElementById("charNum").innerHTML = len;
+    pCompare(len, point);
+  }
+  else {
+    pCompare(len, point);
+  }
 
-        pCompare(len, point);
-      });
+  // 기존 번역 내역에서 추가하거나 새로이 입력할 때 글자 수 세기
+  $('#sourcetxt').keyup(function(){
+    var m = $(this).val().replace(/\s+/g, ''); //입력한 값 공백제거
+    var len = m.length;
+    document.getElementById("charNum").innerHTML = len;
 
-      //글자 수 - 포인트 대조 후 버튼 활성화
-      function pCompare(len, point){
-        if(point<len || point <= 0) {
-          console.log(len,",",point);
-          button_click.disabled = true;
-          document.getElementById("notices").innerHTML = '포인트가 부족합니다';
-        } else {
-          button_click.disabled = false;
-          document.getElementById("notices").innerHTML = '';
-        }
-      }
+    pCompare(len, point);
+  });
 
-      // 다이얼로그 창 띄우기
-      $( function() {
-        $( "#dialog" ).dialog({
-          autoOpen: false
-        });
+  //글자 수 - 포인트 대조 후 버튼 활성화
+  function pCompare(len, point){
+    //console.log(typeof(len),",",typeof(point));
+    if(point == 0) {
+      button_click.disabled = true;
+    }
+    else if(point >= len) {
+      button_click.disabled = false;
+      document.getElementById("notices").innerHTML = '';
+    }
+  }
 
-        $( "#opener" ).on( "click", function() {
-          $( "#dialog" ).dialog( "open" );
-        });
-      } );
+  document.getElementById("trans").addEventListener('click', function () {
+    trLen = document.getElementById("charNum").innerHTML
+    if(point < trLen) {
+      console.log(trLen)
+      alert('포인트가 부족합니다. 충전 후 이용바랍니다')
+      $( "#dialog" ).dialog( "open" );
+      button_click.disabled = true;
+    }
+  });
 
-      // 이니시스 결제처리
-      var IMP = window.IMP;
-        IMP.init("imp67011510");
-
-        var today = new Date();
-        var hours = today.getHours(); // 시
-        var minutes = today.getMinutes();  // 분
-        var seconds = today.getSeconds();  // 초
-        var milliseconds = today.getMilliseconds();
-        var makeMerchantUid = hours +  minutes + seconds + milliseconds;
-        //
-
-        function requestPay() {
-             var amount_money = document.getElementById("money").value;
-            IMP.request_pay({
-                pg : 'html5_inicis',
-                pay_method : 'card',
-                merchant_uid: "IMP"+makeMerchantUid,
-                name : '번역 포인트',
-                amount : amount_money,
-                buyer_email : 'rladudtj52@naver.com',
-                buyer_name : '모코코 기술연구소',
-                buyer_tel : '010-2689-3756',
-                buyer_addr : '서울 마포구 상암산로 76',
-                buyer_postcode : '123-456'
-            }, function (rsp) { // callback
-              if (rsp.success) {
-                    console.log(rsp);
-                    var msg = '결제가 완료되었습니다.';
-                    alert(msg + rsp.paid_amount + '원');
-                    location.href = 'paidamount?paidamount='+rsp.paid_amount;
-                } else {
-                    var msg = '결제에 실패하였습니다.';
-                    msg += ' 에러내용 : ' + rsp.error_msg;
-                    alert(msg);
-                }
-            });
-        }
-    </script>
+</script>
   </body>
 </html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/myinfo.css">
+    </head>
+    <body style="background-color: #f9f9f9;">
+        <header>{% include "nav.html" %}</header>
+        <main class="main">
+            <div class="top-menu">
+                <h1>가입정보</h1>
+            </div>
+
+            <div id="demo">
+                <div class="table-responsive-vertical shadow-z-1" style="width: 1000px; margin: 0 auto;">
+                    <!-- Table starts here -->
+                    <table id="table" class="table table-hover table-mc-light-blue">
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td data-title="Name" class="info_cate">이름</td>
+                                    <td data-title="Name">{{uname}}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td data-title="Email" class="info_cate">이메일</td>
+                                    <td data-title="Email">{{email}}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td data-title="Email" class="info_cate">분류</td>
+                                    <td data-title="Email">{{type}}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td data-title="Email" class="info_cate">현재포인트</td>
+                                    <td data-title="Email">{{point}}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td data-title="Email" class="info_cate">가입일자</td>
+                                    <td data-title="Email">{{joindate}}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+</body>
+</html>

@@ -183,7 +183,7 @@ def my_charge_point(target_uid): #나의 결제(충전) 정보 가져오기
 def my_page(target_uid): # 내 가입정보 불러오기
     conn = pymysql.connect(host='34.64.173.250', user='root', password='mococo1$', db='for_prac', charset='utf8')
     cur = conn.cursor()
-    sql = "SELECT u.email,u.NAME,u.TYPE,concat(p.point, ' 포인트'),u.datetime FROM user_info u JOIN point p ON u.uid=p.uid WHERE u.uid=%s ORDER BY p.datetime DESC LIMIT 1;"
+    sql = "SELECT u.email,u.NAME,u.TYPE,concat(p.final, ' 포인트'),u.datetime FROM user_info u JOIN point p ON u.uid=p.uid WHERE u.uid=%s ORDER BY p.datetime DESC LIMIT 1;"
     sql_charge_data = (target_uid)
     cur.execute(sql, target_uid)
     result = cur.fetchone()
